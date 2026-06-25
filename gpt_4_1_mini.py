@@ -7,9 +7,8 @@ from tqdm import tqdm
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-INPUT_PATH = "trip_half.csv"
+INPUT_PATH = "data/tripadvisor.csv"
 TEXT_COL = "review_text"
-OUTPUT_CSV = "review_absa_4omini_full.csv"
 
 MODEL_NAME = "gpt-4.1-mini"
 
@@ -214,3 +213,24 @@ for save_start in range(START_INDEX, len(rows), SAVE_EVERY):
 print("All chunk files saved.")
 print("Total processed:", total_processed_count)
 print("Total errors:", error_count)
+
+## 파일 합치기
+
+all_files = sorted([
+    os.path.join(OUTPUT_DIR, f)
+    for f in os.listdir(OUTPUT_DIR)
+    if f.endswith(".csv")
+])
+
+full_aspect = pd.concat(
+    [pd.read_csv(f) for f in all_files],
+    ignore_index=True
+)
+
+full_aspect.to_csv(
+    "data/full_aspect.csv",
+    index=False,
+    encoding="utf-8-sig"
+)
+
+print("Merged full aspect saved: data/full_aspect.csv")

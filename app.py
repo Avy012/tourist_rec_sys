@@ -172,7 +172,7 @@ st.markdown("""
 # =========================
 @st.cache_data
 def load_data():
-    return pd.read_csv("tourist_profile_data.csv")
+    return pd.read_csv("data/tourist_profile_data.csv")
 
 
 @st.cache_resource

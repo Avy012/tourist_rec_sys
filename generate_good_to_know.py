@@ -7,8 +7,8 @@ from tqdm import tqdm
 from dotenv import load_dotenv
 from openai import OpenAI
 
-INPUT_CSV = "./recsys/tourist_profile_data.csv"
-OUTPUT_CSV = "tourist_profile_data_with_tips.csv"
+INPUT_CSV = "data/tourist_profile_data.csv"
+OUTPUT_CSV = "data/tourist_profile_data_with_tips.csv"
 
 MODEL_NAME = "gpt-4.1-mini"
 CHUNK_SIZE = 10
