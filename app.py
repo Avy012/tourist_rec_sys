@@ -246,7 +246,7 @@ def clean_place_name(place_name):
 def get_local_image_path(place_name):
     clean_name = clean_place_name(place_name)
 
-    for ext in ["jpg", "jpeg", "png", "webp"]:
+    for ext in ["jpg", "jpeg", "JPG", "png", "webp"]:
         path = os.path.join("images", f"{clean_name}.{ext}")
         if os.path.exists(path):
             return path
