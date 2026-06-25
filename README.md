@@ -1,4 +1,7 @@
-# 📂 프로젝트 구조
+# Streamlit 웹사이트 주소
+```https://touristrecsys-ot5u6kujx4nkyzt2p34zwe.streamlit.app/ ```
+
+# 프로젝트 구조
 
 | 파일 | 설명 |
 |------|------|
