@@ -24,7 +24,15 @@
 pip install -r requirements.txt
 ```
 
-### 2. Streamlit 실행
+### 2. ABSA 추출 및 관광지 프로필 만들기
+
+```bash
+python gpt_4_1_mini.py
+python normalize_aspects.py
+python generate_good_to_know.py
+```
+
+### 3. Streamlit 실행
 
 ```bash
 streamlit run app.py
