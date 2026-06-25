@@ -1,6 +1,7 @@
 import os
 import re
 import base64
+import html
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -18,7 +19,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 .stApp {
-    background-color: #f6f8fb;
+    background-color: transparent;
 }
 
 .block-container {
@@ -53,11 +54,13 @@ st.markdown("""
 }
 
 .selected-box {
-    padding: 14px 18px;
-    border-radius: 18px;
-    background-color: #eef6ff;
-    border: 1px solid #bfdbfe;
+    background:#EFF6FF;
+    border:1px solid #BFDBFE;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 12px;
     margin-bottom: 22px;
+    color:#1E3A5F;
 }
 
 .place-title {
@@ -78,7 +81,25 @@ st.markdown("""
     font-size: 15px;
     font-weight: 750;
     color: #374151;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+}
+
+.intro-text {
+    color:#374151;
+    line-height:1.6;
+    margin-bottom:12px;
+    font-size:15px;
+
+    height: 72px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.address-text {
+    color:#6B7280;
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:14px;
 }
 
 .fixed-img {
@@ -127,9 +148,15 @@ st.markdown("""
     padding: 14px 16px;
     margin-top: 10px;
     margin-bottom: 18px;
+
     color: #7C2D12;
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.7;
+
+    min-height: 110px;
+
+    display: flex;
+    align-items: center;
 }
 
 .small-note {
@@ -145,8 +172,7 @@ st.markdown("""
 # =========================
 @st.cache_data
 def load_data():
-    df = pd.read_csv("tourist_profile_data.csv")
-    return df
+    return pd.read_csv("tourist_profile_data.csv")
 
 
 @st.cache_resource
@@ -163,100 +189,56 @@ model = load_sbert_model()
 # =========================
 TOP_N = 6
 
-KEYWORDS = {
-    "🏛 History": "history",
-    "🎎 Culture": "culture",
-    "🏯 Architecture": "architecture",
-    "📸 Photo Spot": "views",
-    "🌳 Nature": "nature",
-    "🍜 Food": "food",
-    "🛍 Shopping": "shopping",
-    "🎡 Activities": "activities",
-    "🚇 Easy Access": "accessibility",
-    "✨ Clean": "cleanliness",
-    "🙅 Less Crowded": "crowds",
-    "💸 Budget Friendly": "price",
-}
-
-PREFERENCE_TEXT = {
-    "history": "rich history and historical places",
-    "culture": "traditional culture and cultural experiences",
-    "architecture": "beautiful architecture and impressive buildings",
-    "views": "great photo spots and scenic views",
-    "nature": "natural scenery, parks, and relaxing outdoor spaces",
-    "food": "local food, restaurants, and cafes",
-    "shopping": "shopping streets, markets, and stores",
-    "activities": "fun activities, tours, and experiences",
-    "accessibility": "easy access by public transportation",
-    "cleanliness": "clean and well-maintained environment",
-    "crowds": "quiet and less crowded places",
-    "price": "budget-friendly places with good value",
-}
-
-DISPLAY_NAME = {
-    "history": "Rich history",
-    "culture": "Traditional culture",
-    "architecture": "Beautiful architecture",
-    "views": "Great photo spots",
-    "view": "Great photo spots",
-    "nature": "Natural scenery",
-    "food": "Local food",
-    "shopping": "Shopping spots",
-    "activities": "Fun experiences",
-    "accessibility": "Easy access",
-    "cleanliness": "Clean environment",
-    "service": "Helpful service",
-    "atmosphere": "Nice atmosphere",
-    "comfort": "Comfortable visit",
-    "family-friendliness": "Family friendly",
-    "family_friendliness": "Family friendly",
-    "transportation": "Convenient transport",
-    "price": "Good value",
-    "crowds": "Popular spot",
-    "aquarium": "Aquarium",
-    "exhibits": "Exhibits",
-    "variety_of_fish": "Variety of fish",
-}
+KEYWORDS = [
+    "Scenery",
+    "Nature",
+    "History & Heritage",
+    "Culture",
+    "Architecture",
+    "Food & Drink",
+    "Shopping",
+    "Activities",
+    "Transportation",
+    "Accessibility",
+    "Facilities",
+    "Service",
+    "Price",
+    "Crowds",
+    "Cleanliness",
+    "Safety",
+    "Atmosphere",
+]
 
 ASPECT_EMOJI = {
-    "history": "🏛",
-    "culture": "🎎",
-    "architecture": "🏯",
-    "views": "📸",
-    "view": "📸",
-    "nature": "🌳",
-    "food": "🍜",
-    "shopping": "🛍",
-    "activities": "🎡",
-    "accessibility": "🚇",
-    "transportation": "🚆",
-    "cleanliness": "✨",
-    "service": "🤝",
-    "atmosphere": "🌅",
-    "comfort": "🪑",
-    "family-friendliness": "👨‍👩‍👧",
-    "family_friendliness": "👨‍👩‍👧",
-    "price": "💸",
-    "crowds": "🔥",
-    "aquarium": "🐠",
-    "exhibits": "🖼",
-    "variety_of_fish": "🐟",
-}
-
-TIP_TEXT = {
-    "crowds": "This spot can get popular during peak hours, so visiting earlier in the day may give you a more relaxed experience.",
-    "price": "Some visitors mention the cost, so it may be worth checking ticket prices or available passes before you go.",
-    "waiting_time": "There may be some waiting during busy times, so arriving a little earlier can make the visit smoother.",
-    "queue": "Lines can form during peak hours, so planning your visit outside the busiest times is a good idea.",
-    "accessibility": "Public transportation or route planning may make the visit easier.",
-    "transportation": "Checking the best transit route in advance can help you save time.",
-    "cleanliness": "A few visitors mention facility conditions, so it may be helpful to plan short breaks nearby.",
+    "Scenery": "📸",
+    "Nature": "🌳",
+    "History & Heritage": "🏛",
+    "Culture": "🎎",
+    "Architecture": "🏯",
+    "Food & Drink": "🍜",
+    "Shopping": "🛍",
+    "Activities": "🎡",
+    "Transportation": "🚆",
+    "Accessibility": "♿",
+    "Facilities": "🏢",
+    "Service": "🤝",
+    "Price": "💸",
+    "Crowds": "🔥",
+    "Cleanliness": "✨",
+    "Safety": "🛡",
+    "Atmosphere": "🌅",
 }
 
 
 # =========================
 # Helper functions
 # =========================
+def safe_text(x):
+    if pd.isna(x):
+        return ""
+    return str(x).strip()
+
+
 def clean_place_name(place_name):
     return re.sub(r"^\d+\.\s*", "", str(place_name)).strip()
 
@@ -327,65 +309,46 @@ def parse_aspects(text):
     return items
 
 
-def pretty_aspect(aspect):
-    aspect = str(aspect).strip().lower()
-    return DISPLAY_NAME.get(aspect, aspect.replace("_", " ").title())
-
-
 def build_profile_text(row):
     pos_items = parse_aspects(row.get("positive_top10", ""))
     neg_items = parse_aspects(row.get("negative_top10", ""))
 
-    positive_text = ", ".join([pretty_aspect(a) for a, _ in pos_items[:10]])
-    negative_text = ", ".join([pretty_aspect(a) for a, _ in neg_items[:5]])
+    positive_text = ", ".join([aspect for aspect, _ in pos_items[:10]])
+    negative_text = ", ".join([aspect for aspect, _ in neg_items[:5]])
+    intro = safe_text(row.get("intro", ""))
 
     return (
+        f"{intro} "
         f"This tourist attraction is known for {positive_text}. "
         f"Visitors may also mention {negative_text}."
     )
 
 
 def build_user_text(selected_keywords):
-    selected_texts = [
-        PREFERENCE_TEXT[k]
-        for k in selected_keywords
-        if k in PREFERENCE_TEXT
-    ]
-
-    return "I prefer tourist attractions with " + ", ".join(selected_texts) + "."
+    return "I prefer tourist attractions with " + ", ".join(selected_keywords) + "."
 
 
 def highlight_badges(items, limit=5):
     if not items:
         return "<span class='small-note'>No highlight data available</span>"
 
-    html = ""
+    html_code = ""
 
     for aspect, _ in items[:limit]:
-        key = str(aspect).strip().lower()
-        emoji = ASPECT_EMOJI.get(key, "✨")
+        aspect = safe_text(aspect)
+        emoji = ASPECT_EMOJI.get(aspect, "✨")
 
-        html += (
+        html_code += (
             f"<span class='highlight-item'>"
-            f"{emoji} {pretty_aspect(aspect)}"
+            f"{emoji} {html.escape(aspect)}"
             f"</span>"
         )
 
-    return html
+    return html_code
 
 
-def travel_tip(neg_items):
-    if not neg_items:
-        return "No major concerns found. Enjoy your visit!"
-
-    for aspect, _ in neg_items:
-        key = str(aspect).strip().lower()
-
-        if key in TIP_TEXT:
-            return TIP_TEXT[key]
-
-    top_aspect = pretty_aspect(neg_items[0][0]).lower()
-    return f"Some visitors mention {top_aspect}, so it may be helpful to check details before your visit."
+def get_good_to_know(row):
+    return safe_text(row.get("good_to_know", ""))
 
 
 @st.cache_data
@@ -405,7 +368,7 @@ def encode_profiles(profile_texts):
     return embeddings
 
 
-def calculate_sbert_match(selected_keywords, profile_embeddings):
+def calculate_sbert_match(selected_keywords, profile_embeddings, df_profile):
     user_text = build_user_text(selected_keywords)
 
     user_embedding = model.encode(
@@ -414,9 +377,26 @@ def calculate_sbert_match(selected_keywords, profile_embeddings):
         convert_to_numpy=True
     )
 
-    similarities = np.dot(profile_embeddings, user_embedding[0])
+    sbert_sim = np.dot(profile_embeddings, user_embedding[0])
 
-    return similarities
+    selected_set = set(selected_keywords)
+
+    aspect_scores = []
+
+    for _, row in df_profile.iterrows():
+        pos_items = parse_aspects(row.get("positive_top10", ""))
+        pos_aspects = {aspect for aspect, _ in pos_items}
+
+        overlap = len(selected_set & pos_aspects)
+        overlap_ratio = overlap / len(selected_set) if selected_set else 0
+
+        aspect_scores.append(overlap_ratio)
+
+    aspect_scores = np.array(aspect_scores)
+
+    final_scores = (0.35 * sbert_sim) + (0.65 * aspect_scores)
+
+    return final_scores
 
 
 # =========================
@@ -447,7 +427,7 @@ st.markdown("""
 <div class="hero">
     <div class="hero-title">🌏 SmartTrip AI</div>
     <div class="hero-sub">
-        Discover Korean tourist attractions using ABSA-based destination profiles and SBERT similarity.
+        Discover Must-Visit Attractions in South Korea.
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -456,26 +436,30 @@ st.markdown("""
 # =========================
 # Keyword selector
 # =========================
-st.markdown('<div class="keyword-title">Choose Your Travel Style</div>', unsafe_allow_html=True)
+st.markdown(
+    '<div class="keyword-title">Choose Your Travel Style</div>',
+    unsafe_allow_html=True
+)
 st.caption("Select one or more preferences. Recommendations update automatically.")
 
-cols = st.columns(6)
+cols = st.columns(5)
 
-for i, (label, value) in enumerate(KEYWORDS.items()):
-    selected = value in st.session_state.selected_keywords
-    btn_label = f"✓ {label}" if selected else label
+for i, aspect in enumerate(KEYWORDS):
+    emoji = ASPECT_EMOJI.get(aspect, "✨")
+    selected = aspect in st.session_state.selected_keywords
+    btn_label = f"✓ {emoji} {aspect}" if selected else f"{emoji} {aspect}"
 
-    with cols[i % 6]:
-        if st.button(btn_label, key=f"kw_{value}", use_container_width=True):
-            toggle_keyword(value)
+    with cols[i % 5]:
+        if st.button(btn_label, key=f"kw_{aspect}", use_container_width=True):
+            toggle_keyword(aspect)
             st.rerun()
 
 if st.session_state.selected_keywords:
-    selected_text = ", ".join([pretty_aspect(x) for x in st.session_state.selected_keywords])
+    selected_text = ", ".join(st.session_state.selected_keywords)
     st.markdown(
         f"""
         <div class="selected-box">
-            <b>Selected Preferences:</b> {selected_text}
+            <b>Selected Preferences:</b> {html.escape(selected_text)}
         </div>
         """,
         unsafe_allow_html=True
@@ -489,16 +473,26 @@ else:
 # =========================
 if st.session_state.selected_keywords:
     similarities = calculate_sbert_match(
-        st.session_state.selected_keywords,
-        profile_embeddings
-    )
+    st.session_state.selected_keywords,
+    profile_embeddings,
+    df_profile
+)
 
     result = df_profile.copy()
     result["similarity"] = similarities
-    result["match_percent"] = (result["similarity"] * 100).round().astype(int)
-    result["match_percent"] = result["match_percent"].clip(lower=0, upper=100)
-
     result = result.sort_values("similarity", ascending=False).head(TOP_N)
+
+    sim_min = result["similarity"].min()
+    sim_max = result["similarity"].max()
+
+    if sim_max == sim_min:
+        result["match_percent"] = 85
+    else:
+        result["match_percent"] = (
+            70 + (result["similarity"] - sim_min) / (sim_max - sim_min) * 28
+        ).round().astype(int)
+
+    result["match_percent"] = result["match_percent"].clip(70, 98)
 
     st.markdown("## ⭐ Recommended Attractions")
 
@@ -507,8 +501,11 @@ if st.session_state.selected_keywords:
     for idx, (_, row) in enumerate(result.iterrows()):
         place_name = clean_place_name(row["location_name"])
         pos_items = parse_aspects(row.get("positive_top10", ""))
-        neg_items = parse_aspects(row.get("negative_top10", ""))
         img_path = get_local_image_path(place_name)
+
+        intro = safe_text(row.get("intro", ""))
+        address = safe_text(row.get("english_address", ""))
+        good_to_know = get_good_to_know(row)
 
         rank = idx + 1
         medal = "🥇" if rank == 1 else "🥈" if rank == 2 else "🥉" if rank == 3 else f"{rank}."
@@ -519,7 +516,7 @@ if st.session_state.selected_keywords:
 
                 st.markdown(
                     f"""
-                    <div class="place-title">{medal} {place_name}</div>
+                    <div class="place-title">{medal} {html.escape(place_name)}</div>
                     <div class="match-text">⭐ {row["match_percent"]}% Match</div>
                     """,
                     unsafe_allow_html=True
@@ -529,24 +526,54 @@ if st.session_state.selected_keywords:
                     st.markdown(
                         f"""
                         <div class="rating-text">
-                            ⭐ Visitor Rating: {row["avg_rating"]:.2f}/5.0
+                            ⭐ Visitor Rating: {float(row["avg_rating"]):.1f}/5.0
                         </div>
                         """,
                         unsafe_allow_html=True
                     )
 
-                st.markdown('<div class="section-label">✨ Highlights</div>', unsafe_allow_html=True)
-                st.markdown(highlight_badges(pos_items, limit=5), unsafe_allow_html=True)
+                if intro:
+                    st.markdown(
+                        f"""
+                        <div class="intro-text">
+                            {html.escape(intro)}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
-                st.markdown('<div class="section-label">💡 Good to Know</div>', unsafe_allow_html=True)
+                if address:
+                    st.markdown(
+                        f"""
+                        <div class="address-text">
+                            📍 {html.escape(address)}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
                 st.markdown(
-                    f"""
-                    <div class="tip-box">
-                        {travel_tip(neg_items)}
-                    </div>
-                    """,
+                    '<div class="section-label">✨ Highlights</div>',
                     unsafe_allow_html=True
                 )
+                st.markdown(
+                    highlight_badges(pos_items, limit=5),
+                    unsafe_allow_html=True
+                )
+
+                if good_to_know:
+                    st.markdown(
+                        '<div class="section-label">💡 Good to Know</div>',
+                        unsafe_allow_html=True
+                    )
+                    st.markdown(
+                        f"""
+                        <div class="tip-box">
+                            {html.escape(good_to_know)}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
 else:
     st.markdown("## How it works")
