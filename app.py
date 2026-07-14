@@ -491,33 +491,39 @@ def highlight_badges(items, limit=5):
 
 
 def parse_topic_dict(value):
-    """Convert the stored topic dictionary string into a safe Python dict."""
-    empty = {"positive": [], "neutral": [], "negative": []}
+    empty = {
+        "positive": None,
+        "neutral": None,
+        "negative": None,
+    }
 
-    if isinstance(value, dict):
-        parsed = value
-    elif pd.isna(value) or not str(value).strip():
+    if pd.isna(value) or not str(value).strip():
         return empty
-    else:
-        try:
-            parsed = ast.literal_eval(str(value))
-        except (ValueError, SyntaxError):
-            return empty
 
-    if not isinstance(parsed, dict):
+    try:
+        parsed = ast.literal_eval(str(value))
+    except Exception:
         return empty
 
     result = {}
-    for sentiment in ["positive", "neutral", "negative"]:
-        topics = parsed.get(sentiment, [])
-        if not isinstance(topics, (list, tuple)):
-            topics = []
 
-        result[sentiment] = [
-            safe_text(topic)
-            for topic in topics
-            if safe_text(topic)
-        ]
+    for sentiment in ["positive", "neutral", "negative"]:
+        item = parsed.get(sentiment, {})
+
+        if not isinstance(item, dict):
+            result[sentiment] = None
+            continue
+
+        topic = safe_text(item.get("topic"))
+        phrase = safe_text(item.get("phrase"))
+
+        if not topic:
+            result[sentiment] = None
+        else:
+            result[sentiment] = {
+                "topic": topic,
+                "phrase": phrase,
+            }
 
     return result
 
@@ -525,7 +531,7 @@ def parse_topic_dict(value):
 def visitor_insights_html(topic_value):
     topics = parse_topic_dict(topic_value)
 
-    sentiment_config = {
+    config = {
         "positive": ("😊", "Positive"),
         "neutral": ("😐", "Neutral"),
         "negative": ("🙁", "Negative"),
@@ -534,22 +540,20 @@ def visitor_insights_html(topic_value):
     rows = []
 
     for sentiment in ["positive", "neutral", "negative"]:
-        topic_list = topics[sentiment]
+        item = topics[sentiment]
 
-        # Completely omit sentiments with zero topics.
-        if not topic_list:
+        if item is None:
             continue
 
-        emoji, label = sentiment_config[sentiment]
-        joined_topics = ", ".join(
-            html.escape(topic)
-            for topic in topic_list
-        )
+        emoji, label = config[sentiment]
+
+        text = html.escape(item["topic"])
+
+        if item["phrase"]:
+            text += f" ({html.escape(item['phrase'])})"
 
         rows.append(
-            "<div class='insight-row'>"
-            f"<b>{emoji} {label}:</b> {joined_topics}"
-            "</div>"
+            f"<div class='insight-row'><b>{emoji} {label}:</b> {text}</div>"
         )
 
     if not rows:
@@ -586,7 +590,7 @@ def owi_html(value):
 
     return (
         f"<div class='owi-box {css_class}'>"
-        "Overcrowding Warning Index: "
+        "OWI (Overcrowding Warning Index): "
         f"{level} {emoji} ({score:.2f})"
         "</div>"
     )
