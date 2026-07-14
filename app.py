@@ -367,6 +367,62 @@ def prepare_profiles(df):
     return temp
 
 
+def validate_profile_data(df_profile):
+    """Validate the uploaded attraction-profile data before SBERT encoding."""
+    required_columns = [
+        "location_name",
+        "positive_top10",
+        "negative_top10",
+        "intro",
+    ]
+
+    missing_columns = [
+        column for column in required_columns
+        if column not in df_profile.columns
+    ]
+
+    if missing_columns:
+        raise ValueError(
+            "Missing required columns: " + ", ".join(missing_columns)
+        )
+
+    if df_profile.empty:
+        raise ValueError("The tourist profile data contains no rows.")
+
+    if df_profile["location_name"].isna().all():
+        raise ValueError("All location_name values are missing.")
+
+    if "profile_text" not in df_profile.columns:
+        raise ValueError("profile_text was not generated.")
+
+    null_profile_count = int(df_profile["profile_text"].isna().sum())
+    empty_profile_count = int(
+        df_profile["profile_text"]
+        .fillna("")
+        .astype(str)
+        .str.strip()
+        .eq("")
+        .sum()
+    )
+
+    profile_lengths = (
+        df_profile["profile_text"]
+        .fillna("")
+        .astype(str)
+        .str.len()
+    )
+
+    return {
+        "rows": len(df_profile),
+        "columns": df_profile.columns.tolist(),
+        "null_profile_count": null_profile_count,
+        "empty_profile_count": empty_profile_count,
+        "min_profile_length": int(profile_lengths.min()),
+        "max_profile_length": int(profile_lengths.max()),
+        "mean_profile_length": float(profile_lengths.mean()),
+    }
+
+
 @st.cache_data(show_spinner=False)
 def encode_profiles(profile_texts):
     """Encode attraction profiles after the model has been loaded lazily."""
@@ -486,17 +542,109 @@ else:
 # Recommendation results
 # =========================
 if st.session_state.selected_keywords:
-    # Load SBERT only after the user selects at least one preference.
-    with st.spinner("Loading recommendation model..."):
-        profile_embeddings = encode_profiles(
-            tuple(df_profile["profile_text"].tolist())
+    status_box = st.status(
+        "Preparing recommendations...",
+        expanded=True
+    )
+
+    try:
+        with status_box:
+            st.write("Step 1/5: Validating tourist profile data...")
+            print("Step 1/5: Validating tourist profile data", flush=True)
+
+            validation = validate_profile_data(df_profile)
+
+            st.write(f"Rows: {validation['rows']}")
+            st.write(
+                "Profile text length: "
+                f"min={validation['min_profile_length']}, "
+                f"mean={validation['mean_profile_length']:.1f}, "
+                f"max={validation['max_profile_length']}"
+            )
+
+            if validation["null_profile_count"] > 0:
+                st.warning(
+                    f"{validation['null_profile_count']} profile_text values are null."
+                )
+
+            if validation["empty_profile_count"] > 0:
+                st.warning(
+                    f"{validation['empty_profile_count']} profile_text values are empty."
+                )
+
+            if validation["max_profile_length"] > 10000:
+                st.warning(
+                    "At least one profile_text is unusually long. "
+                    "This may slow down encoding."
+                )
+
+            st.write("Step 2/5: Loading SBERT model...")
+            print("Step 2/5: Loading SBERT model", flush=True)
+
+            model = load_sbert_model()
+
+            st.write("Step 2/5 complete: SBERT model loaded.")
+            print("Step 2/5 complete: SBERT model loaded", flush=True)
+
+            profile_texts = tuple(
+                df_profile["profile_text"]
+                .fillna("")
+                .astype(str)
+                .tolist()
+            )
+
+            st.write(
+                f"Step 3/5: Encoding {len(profile_texts)} attraction profiles..."
+            )
+            print(
+                f"Step 3/5: Encoding {len(profile_texts)} attraction profiles",
+                flush=True
+            )
+
+            profile_embeddings = encode_profiles(profile_texts)
+
+            st.write(
+                "Step 3/5 complete: "
+                f"embedding shape={profile_embeddings.shape}"
+            )
+            print(
+                f"Step 3/5 complete: shape={profile_embeddings.shape}",
+                flush=True
+            )
+
+            st.write("Step 4/5: Encoding user preferences...")
+            print("Step 4/5: Encoding user preferences", flush=True)
+
+            similarities = calculate_sbert_match(
+                st.session_state.selected_keywords,
+                profile_embeddings,
+                df_profile
+            )
+
+            st.write("Step 4/5 complete: Similarities calculated.")
+            print("Step 4/5 complete: Similarities calculated", flush=True)
+
+            st.write("Step 5/5: Building recommendation cards...")
+            print("Step 5/5: Building recommendation cards", flush=True)
+
+        status_box.update(
+            label="Recommendations ready",
+            state="complete",
+            expanded=False
         )
 
-        similarities = calculate_sbert_match(
-            st.session_state.selected_keywords,
-            profile_embeddings,
-            df_profile
+    except Exception as exc:
+        status_box.update(
+            label="Recommendation failed",
+            state="error",
+            expanded=True
         )
+        st.error(f"{type(exc).__name__}: {exc}")
+        print(
+            f"Recommendation error: {type(exc).__name__}: {exc}",
+            flush=True
+        )
+        st.stop()
 
     result = df_profile.copy()
     result["similarity"] = similarities
