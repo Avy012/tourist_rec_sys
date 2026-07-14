@@ -8,6 +8,8 @@ import streamlit as st
 from sentence_transformers import SentenceTransformer
 
 
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+
 st.set_page_config(
     page_title="SmartTrip AI",
     page_icon="🌏",
@@ -429,7 +431,7 @@ def toggle_keyword(value):
 # Prepare profile embeddings
 # =========================
 df_profile = prepare_profiles(df)
-profile_embeddings = encode_profiles(df_profile["profile_text"].tolist())
+# profile_embeddings = encode_profiles(df_profile["profile_text"].tolist())
 
 
 # =========================
