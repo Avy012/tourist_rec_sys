@@ -2,7 +2,7 @@ import os
 
 os.environ["HF_HUB_DISABLE_XET"] = "1"
 os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
-os.environ["HF_HUB_DOWNLOAD_TIMEOUT"] = "60"
+os.environ["HF_HUB_DOWNLOAD_TIMEOUT"] = "120"
 os.environ["HF_HUB_ETAG_TIMEOUT"] = "30"
 
 import re
@@ -181,13 +181,16 @@ def load_data():
 
 @st.cache_resource(show_spinner=False)
 def load_sbert_model():
-    """Load SBERT only when recommendations are requested."""
     hf_token = st.secrets.get("HF_TOKEN", None)
+
+    cache_dir = "/tmp/huggingface_sbert_cache"
+    os.makedirs(cache_dir, exist_ok=True)
 
     return SentenceTransformer(
         "sentence-transformers/all-MiniLM-L6-v2",
         token=hf_token,
-        device="cpu"
+        device="cpu",
+        cache_folder=cache_dir
     )
 
 
