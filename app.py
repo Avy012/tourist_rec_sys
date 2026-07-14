@@ -3,6 +3,7 @@ import re
 import base64
 import html
 import ast
+import json
 
 import numpy as np
 import pandas as pd
@@ -275,10 +276,30 @@ ASPECT_EMOJI = {
 @st.cache_data
 def load_data():
     profile_df = pd.read_csv("data/tourist_profile_data.csv")
-    insight_df = pd.read_csv("data/tourist_address_with_intro_owi_topic.csv")
 
-    # Keep the recommendation profile as the main table and attach
-    # intro/address/OWI/topic data by location_name.
+    # Prefer the newest PNN topic + phrase file.
+    insight_candidates = [
+        "data/tourist_address_with_intro_owi_topic(2).csv",
+        "data/tourist_address_with_intro_owi_topic.csv",
+    ]
+
+    insight_path = next(
+        (
+            path
+            for path in insight_candidates
+            if os.path.exists(path)
+        ),
+        None,
+    )
+
+    if insight_path is None:
+        raise FileNotFoundError(
+            "PNN topic data file was not found. Expected one of: "
+            + ", ".join(insight_candidates)
+        )
+
+    insight_df = pd.read_csv(insight_path)
+
     insight_columns = [
         "location_name",
         "english_address",
@@ -287,7 +308,19 @@ def load_data():
         "topic",
     ]
 
-    # Remove duplicate metadata columns before merging, if they already exist.
+    missing_insight_columns = [
+        column
+        for column in insight_columns
+        if column not in insight_df.columns
+    ]
+
+    if missing_insight_columns:
+        raise ValueError(
+            "Missing insight columns: "
+            + ", ".join(missing_insight_columns)
+        )
+
+    # Remove older metadata columns before merging the latest values.
     profile_df = profile_df.drop(
         columns=[
             column
@@ -297,12 +330,14 @@ def load_data():
         errors="ignore",
     )
 
-    return profile_df.merge(
+    merged_df = profile_df.merge(
         insight_df[insight_columns],
         on="location_name",
         how="left",
         validate="one_to_one",
     )
+
+    return merged_df
 
 
 df = load_data()
@@ -505,18 +540,28 @@ def parse_topic_dict(value):
         "negative": None,
     }
 
-    if pd.isna(value) or not str(value).strip():
+    if isinstance(value, dict):
+        parsed = value
+    elif pd.isna(value) or not str(value).strip():
         return empty
+    else:
+        raw_value = str(value).strip()
 
-    try:
-        parsed = ast.literal_eval(str(value))
-    except Exception:
+        try:
+            parsed = ast.literal_eval(raw_value)
+        except (ValueError, SyntaxError):
+            try:
+                parsed = json.loads(raw_value)
+            except (json.JSONDecodeError, TypeError):
+                return empty
+
+    if not isinstance(parsed, dict):
         return empty
 
     result = {}
 
     for sentiment in ["positive", "neutral", "negative"]:
-        item = parsed.get(sentiment, {})
+        item = parsed.get(sentiment)
 
         if not isinstance(item, dict):
             result[sentiment] = None
@@ -527,11 +572,12 @@ def parse_topic_dict(value):
 
         if not topic:
             result[sentiment] = None
-        else:
-            result[sentiment] = {
-                "topic": topic,
-                "phrase": phrase,
-            }
+            continue
+
+        result[sentiment] = {
+            "topic": topic,
+            "phrase": phrase,
+        }
 
     return result
 
