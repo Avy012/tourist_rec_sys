@@ -278,7 +278,7 @@ def load_data():
     profile_df = pd.read_csv("data/tourist_profile_data_with_tips.csv")
 
     # Prefer the newest PNN topic + phrase file.
-    insight_df = pd.read_csv("data/data/tourist_address_with_intro_owi_topic.csv")
+    insight_df = pd.read_csv("data/tourist_address_with_intro_owi_topic.csv")
 
     insight_columns = [
         "location_name",
