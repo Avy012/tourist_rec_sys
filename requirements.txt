@@ -1,7 +1,8 @@
-streamlit
-pandas
-numpy
-sentence-transformers
-torch
-scikit-learn
-Pillow
+streamlit==1.41.1
+pandas==2.2.3
+numpy==1.26.4
+sentence-transformers==3.3.1
+transformers==4.46.3
+torch==2.5.1
+scikit-learn==1.5.2
+Pillow==11.0.0

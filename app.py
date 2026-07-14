@@ -7,6 +7,7 @@ import pandas as pd
 import streamlit as st
 from sentence_transformers import SentenceTransformer
 
+
 st.set_page_config(
     page_title="SmartTrip AI",
     page_icon="🌏",
@@ -397,6 +398,20 @@ def calculate_sbert_match(selected_keywords, profile_embeddings, df_profile):
     final_scores = (0.35 * sbert_sim) + (0.65 * aspect_scores)
 
     return final_scores
+
+print("1. Loading data")
+df = load_data()
+
+print("2. Loading model")
+model = load_sbert_model()
+
+print("3. Preparing profiles")
+df_profile = prepare_profiles(df)
+
+print("4. Encoding profiles")
+profile_embeddings = encode_profiles(df_profile["profile_text"].tolist())
+
+print("5. Finished")
 
 
 # =========================
