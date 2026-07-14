@@ -275,30 +275,10 @@ ASPECT_EMOJI = {
 # =========================
 @st.cache_data
 def load_data():
-    profile_df = pd.read_csv("data/tourist_profile_data.csv")
+    profile_df = pd.read_csv("data/tourist_profile_data_with_tips.csv")
 
     # Prefer the newest PNN topic + phrase file.
-    insight_candidates = [
-        "data/tourist_address_with_intro_owi_topic(2).csv",
-        "data/tourist_address_with_intro_owi_topic.csv",
-    ]
-
-    insight_path = next(
-        (
-            path
-            for path in insight_candidates
-            if os.path.exists(path)
-        ),
-        None,
-    )
-
-    if insight_path is None:
-        raise FileNotFoundError(
-            "PNN topic data file was not found. Expected one of: "
-            + ", ".join(insight_candidates)
-        )
-
-    insight_df = pd.read_csv(insight_path)
+    insight_df = pd.read_csv("data/data/tourist_address_with_intro_owi_topic.csv")
 
     insight_columns = [
         "location_name",
