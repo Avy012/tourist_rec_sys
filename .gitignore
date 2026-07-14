@@ -1,1 +1,16 @@
+# api key
+/.env
+
+# raw data
 tripadvisor.csv
+
+# after 'gpt_4_1_mini.py'
+full_aspect.csv
+
+# after 'normalized_aspects.py'
+aspect_category_map.csv
+profile.csv
+tourist_profile_normalized.csv
+
+# after 'generate_good_to_know.py'
+tourist_profile_data_with_tips.csv

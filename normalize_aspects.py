@@ -13,7 +13,7 @@ from openai import OpenAI
 # =========================
 ABSA_CSV = "data/full_aspect.csv"
 TRIPADVISOR_CSV = "data/tripadvisor.csv"
-ADDRESS_CSV = "data/address/tourist_address_with_intro.csv"
+ADDRESS_CSV = "data/tourist_address_with_intro.csv"
 
 PROFILE_CSV = "data/profile.csv"
 NORMALIZED_CSV = "data/tourist_profile_normalized.csv"
@@ -222,8 +222,26 @@ def normalize_aspects():
         .str.strip()
     )
 
-    aspect_counts = profile["aspect"].dropna().value_counts()
-    unique_aspects = aspect_counts[aspect_counts >= 5].index.tolist()
+    profile["count"] = pd.to_numeric(
+        profile["count"],
+        errors="coerce"
+    ).fillna(0)
+
+    aspect_counts = (
+        profile
+        .dropna(subset=["aspect"])
+        .groupby("aspect")["count"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+
+    unique_aspects = (
+        aspect_counts[
+            aspect_counts >= 5
+        ]
+        .index
+        .tolist()
+    )
 
     print("Total unique aspects :", len(aspect_counts))
     print("Aspects to normalize :", len(unique_aspects))
@@ -293,16 +311,40 @@ def build_tourist_profile_data():
 
     norm = norm[norm["canonical_aspect"].str.lower() != "others"].copy()
 
+    # 동일한 canonical aspect로 매핑된 원시 aspect들의 count를 먼저 합산
+    aggregated = (
+        norm
+        .groupby(
+            ["location_name", "canonical_aspect", "sentiment"],
+            as_index=False
+        )["count"]
+        .sum()
+    )
+
+
+    # 관광지별 positive 상위 10개 canonical aspect
     positive_top10 = (
-        norm[norm["sentiment"] == "positive"]
-        .sort_values(["location_name", "count"], ascending=[True, False])
+        aggregated[
+            aggregated["sentiment"] == "positive"
+        ]
+        .sort_values(
+            ["location_name", "count"],
+            ascending=[True, False]
+        )
         .groupby("location_name")
         .head(10)
     )
 
+
+    # 관광지별 negative 상위 10개 canonical aspect
     negative_top10 = (
-        norm[norm["sentiment"] == "negative"]
-        .sort_values(["location_name", "count"], ascending=[True, False])
+        aggregated[
+            aggregated["sentiment"] == "negative"
+        ]
+        .sort_values(
+            ["location_name", "count"],
+            ascending=[True, False]
+        )
         .groupby("location_name")
         .head(10)
     )
@@ -371,10 +413,8 @@ def build_tourist_profile_data():
 
     if "location_name" in address.columns:
         address_key = "location_name"
-    elif "관광지명" in address.columns:
-        address_key = "관광지명"
     else:
-        raise ValueError("Address file must contain location_name or 관광지명 column.")
+        raise ValueError("Address file must contain location_name.")
 
     if "english_address" in address.columns:
         english_address_col = "english_address"
