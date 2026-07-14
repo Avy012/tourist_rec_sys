@@ -2,6 +2,7 @@ import os
 import re
 import base64
 import html
+import ast
 
 import numpy as np
 import pandas as pd
@@ -157,6 +158,50 @@ st.markdown("""
     align-items: center;
 }
 
+
+.insight-box {
+    background-color: #F8FAFC;
+    border: 1px solid #CBD5E1;
+    border-radius: 16px;
+    padding: 13px 15px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    color: #334155;
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+.insight-row {
+    margin: 3px 0;
+}
+
+.owi-box {
+    border-radius: 16px;
+    padding: 12px 15px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.owi-high {
+    background-color: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #991B1B;
+}
+
+.owi-medium {
+    background-color: #FFFBEB;
+    border: 1px solid #FDE68A;
+    color: #92400E;
+}
+
+.owi-low {
+    background-color: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    color: #166534;
+}
+
 .small-note {
     color: #64748b;
     font-size: 14px;
@@ -221,7 +266,35 @@ ASPECT_EMOJI = {
 # =========================
 @st.cache_data
 def load_data():
-    return pd.read_csv("data/tourist_profile_data.csv")
+    profile_df = pd.read_csv("data/tourist_profile_data.csv")
+    insight_df = pd.read_csv("data/tourist_address_with_intro_owi_topic.csv")
+
+    # Keep the recommendation profile as the main table and attach
+    # intro/address/OWI/topic data by location_name.
+    insight_columns = [
+        "location_name",
+        "english_address",
+        "intro",
+        "OWI",
+        "topic",
+    ]
+
+    # Remove duplicate metadata columns before merging, if they already exist.
+    profile_df = profile_df.drop(
+        columns=[
+            column
+            for column in insight_columns[1:]
+            if column in profile_df.columns
+        ],
+        errors="ignore",
+    )
+
+    return profile_df.merge(
+        insight_df[insight_columns],
+        on="location_name",
+        how="left",
+        validate="one_to_one",
+    )
 
 
 df = load_data()
@@ -415,6 +488,108 @@ def highlight_badges(items, limit=5):
 
     return html_code
 
+
+
+def parse_topic_dict(value):
+    """Convert the stored topic dictionary string into a safe Python dict."""
+    empty = {"positive": [], "neutral": [], "negative": []}
+
+    if isinstance(value, dict):
+        parsed = value
+    elif pd.isna(value) or not str(value).strip():
+        return empty
+    else:
+        try:
+            parsed = ast.literal_eval(str(value))
+        except (ValueError, SyntaxError):
+            return empty
+
+    if not isinstance(parsed, dict):
+        return empty
+
+    result = {}
+    for sentiment in ["positive", "neutral", "negative"]:
+        topics = parsed.get(sentiment, [])
+        if not isinstance(topics, (list, tuple)):
+            topics = []
+
+        result[sentiment] = [
+            safe_text(topic)
+            for topic in topics
+            if safe_text(topic)
+        ]
+
+    return result
+
+
+def visitor_insights_html(topic_value):
+    topics = parse_topic_dict(topic_value)
+
+    sentiment_config = {
+        "positive": ("😊", "Positive"),
+        "neutral": ("😐", "Neutral"),
+        "negative": ("🙁", "Negative"),
+    }
+
+    rows = []
+
+    for sentiment in ["positive", "neutral", "negative"]:
+        topic_list = topics[sentiment]
+
+        # Completely omit sentiments with zero topics.
+        if not topic_list:
+            continue
+
+        emoji, label = sentiment_config[sentiment]
+        joined_topics = ", ".join(
+            html.escape(topic)
+            for topic in topic_list
+        )
+
+        rows.append(
+            "<div class='insight-row'>"
+            f"<b>{emoji} {label}:</b> {joined_topics}"
+            "</div>"
+        )
+
+    if not rows:
+        return ""
+
+    return "<div class='insight-box'>" + "".join(rows) + "</div>"
+
+
+def get_owi_display(value):
+    if pd.isna(value):
+        return None
+
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        return None
+
+    # Boundary handling:
+    # Low: x <= 0.4, Medium: 0.4 < x <= 0.6, High: x > 0.6
+    if score > 0.6:
+        return "High", "🚨", "owi-high", score
+    if score > 0.4:
+        return "Medium", "⚠️", "owi-medium", score
+    return "Low", "✅", "owi-low", score
+
+
+def owi_html(value):
+    display = get_owi_display(value)
+
+    if display is None:
+        return ""
+
+    level, emoji, css_class, score = display
+
+    return (
+        f"<div class='owi-box {css_class}'>"
+        "Overcrowding Warning Index: "
+        f"{level} {emoji} ({score:.2f})"
+        "</div>"
+    )
 
 def get_good_to_know(row):
     return safe_text(row.get("good_to_know", ""))
@@ -616,6 +791,32 @@ if st.session_state.selected_keywords:
                             📍 {html.escape(address)}
                         </div>
                         """,
+                        unsafe_allow_html=True,
+                    )
+
+                insight_html = visitor_insights_html(
+                    row.get("topic", "")
+                )
+
+                if insight_html:
+                    st.markdown(
+                        '<div class="section-label">'
+                        '💬 Visitor Insights'
+                        '</div>',
+                        unsafe_allow_html=True,
+                    )
+                    st.markdown(
+                        insight_html,
+                        unsafe_allow_html=True,
+                    )
+
+                overcrowding_html = owi_html(
+                    row.get("OWI", np.nan)
+                )
+
+                if overcrowding_html:
+                    st.markdown(
+                        overcrowding_html,
                         unsafe_allow_html=True,
                     )
 
