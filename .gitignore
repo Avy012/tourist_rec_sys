@@ -11,6 +11,3 @@ full_aspect.csv
 aspect_category_map.csv
 profile.csv
 tourist_profile_normalized.csv
-
-# after 'generate_good_to_know.py'
-tourist_profile_data_with_tips.csv
