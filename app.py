@@ -175,14 +175,22 @@ st.markdown("""
 def load_data():
     return pd.read_csv("data/tourist_profile_data.csv")
 
-
-@st.cache_resource
+@st.cache_resource(show_spinner="Loading recommendation model...")
 def load_sbert_model():
-    return SentenceTransformer("all-MiniLM-L6-v2")
+    hf_token = st.secrets.get("HF_TOKEN", None)
+
+    return SentenceTransformer(
+        "sentence-transformers/all-MiniLM-L6-v2",
+        token=hf_token,
+        device="cpu"
+    )
 
 
 df = load_data()
+
+print("before model")
 model = load_sbert_model()
+print("after model")
 
 
 # =========================
@@ -398,20 +406,6 @@ def calculate_sbert_match(selected_keywords, profile_embeddings, df_profile):
     final_scores = (0.35 * sbert_sim) + (0.65 * aspect_scores)
 
     return final_scores
-
-print("1. Loading data")
-df = load_data()
-
-print("2. Loading model")
-model = load_sbert_model()
-
-print("3. Preparing profiles")
-df_profile = prepare_profiles(df)
-
-print("4. Encoding profiles")
-profile_embeddings = encode_profiles(df_profile["profile_text"].tolist())
-
-print("5. Finished")
 
 
 # =========================
