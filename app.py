@@ -153,11 +153,12 @@ st.markdown("""
     color: #7C2D12;
     font-size: 14px;
     line-height: 1.7;
-    min-height: 110px;
+    height: 110px;
+    box-sizing: border-box;
+    overflow-y: auto;
     display: flex;
     align-items: center;
 }
-
 
 .insight-box {
     background-color: #F8FAFC;
@@ -169,7 +170,12 @@ st.markdown("""
     color: #334155;
     font-size: 14px;
     line-height: 1.75;
+    height: 110px;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
+
+
 
 .insight-row {
     margin: 3px 0;
@@ -206,6 +212,8 @@ st.markdown("""
     color: #64748b;
     font-size: 14px;
 }
+            
+                        
 </style>
 """, unsafe_allow_html=True)
 
@@ -802,15 +810,27 @@ if st.session_state.selected_keywords:
                     row.get("topic", "")
                 )
 
+                st.markdown(
+                    '<div class="section-label">'
+                    '💬 Visitor Insights'
+                    '</div>',
+                    unsafe_allow_html=True,
+                )
+
                 if insight_html:
                     st.markdown(
-                        '<div class="section-label">'
-                        '💬 Visitor Insights'
-                        '</div>',
+                        insight_html,
                         unsafe_allow_html=True,
                     )
+                else:
                     st.markdown(
-                        insight_html,
+                        """
+                        <div class="insight-box">
+                            <span class="small-note">
+                                No visitor insight data available
+                            </span>
+                        </div>
+                        """,
                         unsafe_allow_html=True,
                     )
 
@@ -839,22 +859,30 @@ if st.session_state.selected_keywords:
                     unsafe_allow_html=True,
                 )
 
+                st.markdown(
+                    '<div class="section-label">'
+                    '💡 Good to Know'
+                    '</div>',
+                    unsafe_allow_html=True,
+                )
+
                 if good_to_know:
-                    st.markdown(
-                        '<div class="section-label">'
-                        '💡 Good to Know'
-                        '</div>',
-                        unsafe_allow_html=True,
+                    tip_content = html.escape(good_to_know)
+                else:
+                    tip_content = (
+                        '<span class="small-note">'
+                        'No additional travel notes available'
+                        '</span>'
                     )
 
-                    st.markdown(
-                        f"""
-                        <div class="tip-box">
-                            {html.escape(good_to_know)}
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
+                st.markdown(
+                    f"""
+                    <div class="tip-box">
+                        {tip_content}
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
 else:
     st.markdown("## How it works")
