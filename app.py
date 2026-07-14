@@ -1,7 +1,9 @@
 import os
 
-# Disable hf_transfer before importing Hugging Face-related libraries.
+os.environ["HF_HUB_DISABLE_XET"] = "1"
 os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+os.environ["HF_HUB_DOWNLOAD_TIMEOUT"] = "60"
+os.environ["HF_HUB_ETAG_TIMEOUT"] = "30"
 
 import re
 import base64
@@ -16,8 +18,6 @@ st.set_page_config(
     page_icon="🌏",
     layout="wide"
 )
-
-st.write("APP VERSION: 2026-07-14 12:30")
 # =========================
 # CSS
 # =========================
