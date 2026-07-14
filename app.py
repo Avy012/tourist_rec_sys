@@ -17,6 +17,7 @@ st.set_page_config(
     layout="wide"
 )
 
+st.write("APP VERSION: 2026-07-14 12:30")
 # =========================
 # CSS
 # =========================
