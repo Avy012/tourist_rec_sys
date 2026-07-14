@@ -177,13 +177,16 @@ def load_data():
 
 @st.cache_resource(show_spinner="Loading recommendation model...")
 def load_sbert_model():
-    hf_token = st.secrets.get("HF_TOKEN", None)
+    print("1. before model")
 
-    return SentenceTransformer(
+    model = SentenceTransformer(
         "sentence-transformers/all-MiniLM-L6-v2",
-        token=hf_token,
         device="cpu"
     )
+
+    print("2. after model")
+
+    return model
 
 
 df = load_data()
