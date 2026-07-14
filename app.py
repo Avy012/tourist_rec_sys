@@ -1,23 +1,20 @@
 import os
-
-os.environ["HF_HUB_DISABLE_XET"] = "1"
-os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
-os.environ["HF_HUB_DOWNLOAD_TIMEOUT"] = "120"
-os.environ["HF_HUB_ETAG_TIMEOUT"] = "30"
-
 import re
 import base64
 import html
+
 import numpy as np
 import pandas as pd
 import streamlit as st
-from sentence_transformers import SentenceTransformer
+
 
 st.set_page_config(
     page_title="SmartTrip AI",
     page_icon="🌏",
     layout="wide"
 )
+
+
 # =========================
 # CSS
 # =========================
@@ -59,13 +56,13 @@ st.markdown("""
 }
 
 .selected-box {
-    background:#EFF6FF;
-    border:1px solid #BFDBFE;
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
     border-radius: 14px;
     padding: 14px 16px;
     margin-top: 12px;
     margin-bottom: 22px;
-    color:#1E3A5F;
+    color: #1E3A5F;
 }
 
 .place-title {
@@ -90,21 +87,20 @@ st.markdown("""
 }
 
 .intro-text {
-    color:#374151;
-    line-height:1.6;
-    margin-bottom:12px;
-    font-size:15px;
-
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    font-size: 15px;
     height: 72px;
     overflow-y: auto;
     padding-right: 4px;
 }
 
 .address-text {
-    color:#6B7280;
-    font-size:14px;
-    line-height:1.5;
-    margin-bottom:14px;
+    color: #6B7280;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 14px;
 }
 
 .fixed-img {
@@ -153,13 +149,10 @@ st.markdown("""
     padding: 14px 16px;
     margin-top: 10px;
     margin-bottom: 18px;
-
     color: #7C2D12;
     font-size: 14px;
     line-height: 1.7;
-
     min-height: 110px;
-
     display: flex;
     align-items: center;
 }
@@ -170,31 +163,6 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
-
-
-# =========================
-# Load data / model
-# =========================
-@st.cache_data
-def load_data():
-    return pd.read_csv("data/tourist_profile_data.csv")
-
-@st.cache_resource(show_spinner=False)
-def load_sbert_model():
-    hf_token = st.secrets.get("HF_TOKEN", None)
-
-    cache_dir = "/tmp/huggingface_sbert_cache"
-    os.makedirs(cache_dir, exist_ok=True)
-
-    return SentenceTransformer(
-        "sentence-transformers/all-MiniLM-L6-v2",
-        token=hf_token,
-        device="cpu",
-        cache_folder=cache_dir
-    )
-
-
-df = load_data()
 
 
 # =========================
@@ -222,6 +190,11 @@ KEYWORDS = [
     "Atmosphere",
 ]
 
+ASPECT_INDEX = {
+    aspect: index
+    for index, aspect in enumerate(KEYWORDS)
+}
+
 ASPECT_EMOJI = {
     "Scenery": "📸",
     "Nature": "🌳",
@@ -244,12 +217,23 @@ ASPECT_EMOJI = {
 
 
 # =========================
+# Load data
+# =========================
+@st.cache_data
+def load_data():
+    return pd.read_csv("data/tourist_profile_data.csv")
+
+
+df = load_data()
+
+
+# =========================
 # Helper functions
 # =========================
-def safe_text(x):
-    if pd.isna(x):
+def safe_text(value):
+    if pd.isna(value):
         return ""
-    return str(x).strip()
+    return str(value).strip()
 
 
 def clean_place_name(place_name):
@@ -268,24 +252,23 @@ def get_local_image_path(place_name):
 
 
 def image_to_base64(path):
-    with open(path, "rb") as f:
-        data = f.read()
+    with open(path, "rb") as file:
+        data = file.read()
 
     ext = os.path.splitext(path)[1].lower().replace(".", "")
     if ext == "jpg":
         ext = "jpeg"
 
-    return f"data:image/{ext};base64,{base64.b64encode(data).decode()}"
+    encoded = base64.b64encode(data).decode()
+    return f"data:image/{ext};base64,{encoded}"
 
 
 def show_fixed_image(img_path):
     if img_path:
         img_src = image_to_base64(img_path)
         st.markdown(
-            f"""
-            <img src="{img_src}" class="fixed-img">
-            """,
-            unsafe_allow_html=True
+            f'<img src="{img_src}" class="fixed-img">',
+            unsafe_allow_html=True,
         )
     else:
         st.markdown(
@@ -294,7 +277,7 @@ def show_fixed_image(img_path):
                 Image not available
             </div>
             """,
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
 
@@ -322,57 +305,7 @@ def parse_aspects(text):
     return items
 
 
-def build_profile_text(row):
-    pos_items = parse_aspects(row.get("positive_top10", ""))
-    neg_items = parse_aspects(row.get("negative_top10", ""))
-
-    positive_text = ", ".join([aspect for aspect, _ in pos_items[:10]])
-    negative_text = ", ".join([aspect for aspect, _ in neg_items[:5]])
-    intro = safe_text(row.get("intro", ""))
-
-    return (
-        f"{intro} "
-        f"This tourist attraction is known for {positive_text}. "
-        f"Visitors may also mention {negative_text}."
-    )
-
-
-def build_user_text(selected_keywords):
-    return "I prefer tourist attractions with " + ", ".join(selected_keywords) + "."
-
-
-def highlight_badges(items, limit=5):
-    if not items:
-        return "<span class='small-note'>No highlight data available</span>"
-
-    html_code = ""
-
-    for aspect, _ in items[:limit]:
-        aspect = safe_text(aspect)
-        emoji = ASPECT_EMOJI.get(aspect, "✨")
-
-        html_code += (
-            f"<span class='highlight-item'>"
-            f"{emoji} {html.escape(aspect)}"
-            f"</span>"
-        )
-
-    return html_code
-
-
-def get_good_to_know(row):
-    return safe_text(row.get("good_to_know", ""))
-
-
-@st.cache_data
-def prepare_profiles(df):
-    temp = df.copy()
-    temp["profile_text"] = temp.apply(build_profile_text, axis=1)
-    return temp
-
-
 def validate_profile_data(df_profile):
-    """Validate the uploaded attraction-profile data before SBERT encoding."""
     required_columns = [
         "location_name",
         "positive_top10",
@@ -381,7 +314,8 @@ def validate_profile_data(df_profile):
     ]
 
     missing_columns = [
-        column for column in required_columns
+        column
+        for column in required_columns
         if column not in df_profile.columns
     ]
 
@@ -396,82 +330,104 @@ def validate_profile_data(df_profile):
     if df_profile["location_name"].isna().all():
         raise ValueError("All location_name values are missing.")
 
-    if "profile_text" not in df_profile.columns:
-        raise ValueError("profile_text was not generated.")
 
-    null_profile_count = int(df_profile["profile_text"].isna().sum())
-    empty_profile_count = int(
-        df_profile["profile_text"]
-        .fillna("")
-        .astype(str)
-        .str.strip()
-        .eq("")
-        .sum()
-    )
+def build_user_vector(selected_keywords):
+    vector = np.zeros(len(KEYWORDS), dtype=float)
 
-    profile_lengths = (
-        df_profile["profile_text"]
-        .fillna("")
-        .astype(str)
-        .str.len()
-    )
+    for aspect in selected_keywords:
+        index = ASPECT_INDEX.get(aspect)
+        if index is not None:
+            vector[index] = 1.0
 
-    return {
-        "rows": len(df_profile),
-        "columns": df_profile.columns.tolist(),
-        "null_profile_count": null_profile_count,
-        "empty_profile_count": empty_profile_count,
-        "min_profile_length": int(profile_lengths.min()),
-        "max_profile_length": int(profile_lengths.max()),
-        "mean_profile_length": float(profile_lengths.mean()),
-    }
+    return vector
 
 
-@st.cache_data(show_spinner=False)
-def encode_profiles(profile_texts):
-    """Encode attraction profiles after the model has been loaded lazily."""
-    model = load_sbert_model()
+def build_attraction_vector(positive_top10):
+    """
+    Build a positive-aspect frequency vector.
 
-    embeddings = model.encode(
-        list(profile_texts),
-        normalize_embeddings=True,
-        convert_to_numpy=True,
-        show_progress_bar=False
-    )
-    return embeddings
+    Example:
+    Nature(120), Scenery(80) ->
+    [Scenery=80, Nature=120, other aspects=0]
+
+    Cosine similarity is scale-invariant, so attractions with the same
+    aspect proportions have the same direction regardless of total counts.
+    """
+    vector = np.zeros(len(KEYWORDS), dtype=float)
+
+    for aspect, count in parse_aspects(positive_top10):
+        index = ASPECT_INDEX.get(aspect)
+
+        if index is not None:
+            vector[index] += float(count)
+
+    return vector
 
 
-def calculate_sbert_match(selected_keywords, profile_embeddings, df_profile):
-    model = load_sbert_model()
-    user_text = build_user_text(selected_keywords)
+def cosine_similarity(vector_a, vector_b):
+    norm_a = np.linalg.norm(vector_a)
+    norm_b = np.linalg.norm(vector_b)
 
-    user_embedding = model.encode(
-        [user_text],
-        normalize_embeddings=True,
-        convert_to_numpy=True,
-        show_progress_bar=False
-    )
+    if norm_a == 0 or norm_b == 0:
+        return 0.0
 
-    sbert_sim = np.dot(profile_embeddings, user_embedding[0])
+    return float(np.dot(vector_a, vector_b) / (norm_a * norm_b))
 
-    selected_set = set(selected_keywords)
 
-    aspect_scores = []
+def calculate_aspect_cosine_scores(selected_keywords, df_profile):
+    user_vector = build_user_vector(selected_keywords)
+
+    scores = []
 
     for _, row in df_profile.iterrows():
-        pos_items = parse_aspects(row.get("positive_top10", ""))
-        pos_aspects = {aspect for aspect, _ in pos_items}
+        attraction_vector = build_attraction_vector(
+            row.get("positive_top10", "")
+        )
 
-        overlap = len(selected_set & pos_aspects)
-        overlap_ratio = overlap / len(selected_set) if selected_set else 0
+        score = cosine_similarity(
+            user_vector,
+            attraction_vector,
+        )
+        scores.append(score)
 
-        aspect_scores.append(overlap_ratio)
+    return np.array(scores, dtype=float)
 
-    aspect_scores = np.array(aspect_scores)
 
-    final_scores = (0.35 * sbert_sim) + (0.65 * aspect_scores)
+def highlight_badges(items, limit=5):
+    if not items:
+        return (
+            "<span class='small-note'>"
+            "No highlight data available"
+            "</span>"
+        )
 
-    return final_scores
+    html_code = ""
+
+    for aspect, _ in items[:limit]:
+        aspect = safe_text(aspect)
+        emoji = ASPECT_EMOJI.get(aspect, "✨")
+
+        html_code += (
+            "<span class='highlight-item'>"
+            f"{emoji} {html.escape(aspect)}"
+            "</span>"
+        )
+
+    return html_code
+
+
+def get_good_to_know(row):
+    return safe_text(row.get("good_to_know", ""))
+
+
+# =========================
+# Validate data
+# =========================
+try:
+    validate_profile_data(df)
+except ValueError as exc:
+    st.error(str(exc))
+    st.stop()
 
 
 # =========================
@@ -486,12 +442,6 @@ def toggle_keyword(value):
         st.session_state.selected_keywords.remove(value)
     else:
         st.session_state.selected_keywords.append(value)
-
-
-# =========================
-# Prepare profile embeddings
-# =========================
-df_profile = prepare_profiles(df)
 
 
 # =========================
@@ -512,159 +462,84 @@ st.markdown("""
 # =========================
 st.markdown(
     '<div class="keyword-title">Choose Your Travel Style</div>',
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
-st.caption("Select one or more preferences. Recommendations update automatically.")
+
+st.caption(
+    "Select one or more preferences. "
+    "Recommendations update automatically."
+)
 
 cols = st.columns(5)
 
 for i, aspect in enumerate(KEYWORDS):
     emoji = ASPECT_EMOJI.get(aspect, "✨")
     selected = aspect in st.session_state.selected_keywords
-    btn_label = f"✓ {emoji} {aspect}" if selected else f"{emoji} {aspect}"
+
+    btn_label = (
+        f"✓ {emoji} {aspect}"
+        if selected
+        else f"{emoji} {aspect}"
+    )
 
     with cols[i % 5]:
-        if st.button(btn_label, key=f"kw_{aspect}", use_container_width=True):
+        if st.button(
+            btn_label,
+            key=f"kw_{aspect}",
+            use_container_width=True,
+        ):
             toggle_keyword(aspect)
             st.rerun()
 
+
 if st.session_state.selected_keywords:
-    selected_text = ", ".join(st.session_state.selected_keywords)
+    selected_text = ", ".join(
+        st.session_state.selected_keywords
+    )
+
     st.markdown(
         f"""
         <div class="selected-box">
-            <b>Selected Preferences:</b> {html.escape(selected_text)}
+            <b>Selected Preferences:</b>
+            {html.escape(selected_text)}
         </div>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 else:
-    st.info("Select your travel preferences above to start exploring recommended attractions.")
+    st.info(
+        "Select your travel preferences above to start "
+        "exploring recommended attractions."
+    )
 
 
 # =========================
 # Recommendation results
 # =========================
 if st.session_state.selected_keywords:
-    status_box = st.status(
-        "Preparing recommendations...",
-        expanded=True
+    similarities = calculate_aspect_cosine_scores(
+        st.session_state.selected_keywords,
+        df,
     )
 
-    try:
-        with status_box:
-            st.write("Step 1/5: Validating tourist profile data...")
-            print("Step 1/5: Validating tourist profile data", flush=True)
-
-            validation = validate_profile_data(df_profile)
-
-            st.write(f"Rows: {validation['rows']}")
-            st.write(
-                "Profile text length: "
-                f"min={validation['min_profile_length']}, "
-                f"mean={validation['mean_profile_length']:.1f}, "
-                f"max={validation['max_profile_length']}"
-            )
-
-            if validation["null_profile_count"] > 0:
-                st.warning(
-                    f"{validation['null_profile_count']} profile_text values are null."
-                )
-
-            if validation["empty_profile_count"] > 0:
-                st.warning(
-                    f"{validation['empty_profile_count']} profile_text values are empty."
-                )
-
-            if validation["max_profile_length"] > 10000:
-                st.warning(
-                    "At least one profile_text is unusually long. "
-                    "This may slow down encoding."
-                )
-
-            st.write("Step 2/5: Loading SBERT model...")
-            print("Step 2/5: Loading SBERT model", flush=True)
-
-            model = load_sbert_model()
-
-            st.write("Step 2/5 complete: SBERT model loaded.")
-            print("Step 2/5 complete: SBERT model loaded", flush=True)
-
-            profile_texts = tuple(
-                df_profile["profile_text"]
-                .fillna("")
-                .astype(str)
-                .tolist()
-            )
-
-            st.write(
-                f"Step 3/5: Encoding {len(profile_texts)} attraction profiles..."
-            )
-            print(
-                f"Step 3/5: Encoding {len(profile_texts)} attraction profiles",
-                flush=True
-            )
-
-            profile_embeddings = encode_profiles(profile_texts)
-
-            st.write(
-                "Step 3/5 complete: "
-                f"embedding shape={profile_embeddings.shape}"
-            )
-            print(
-                f"Step 3/5 complete: shape={profile_embeddings.shape}",
-                flush=True
-            )
-
-            st.write("Step 4/5: Encoding user preferences...")
-            print("Step 4/5: Encoding user preferences", flush=True)
-
-            similarities = calculate_sbert_match(
-                st.session_state.selected_keywords,
-                profile_embeddings,
-                df_profile
-            )
-
-            st.write("Step 4/5 complete: Similarities calculated.")
-            print("Step 4/5 complete: Similarities calculated", flush=True)
-
-            st.write("Step 5/5: Building recommendation cards...")
-            print("Step 5/5: Building recommendation cards", flush=True)
-
-        status_box.update(
-            label="Recommendations ready",
-            state="complete",
-            expanded=False
-        )
-
-    except Exception as exc:
-        status_box.update(
-            label="Recommendation failed",
-            state="error",
-            expanded=True
-        )
-        st.error(f"{type(exc).__name__}: {exc}")
-        print(
-            f"Recommendation error: {type(exc).__name__}: {exc}",
-            flush=True
-        )
-        st.stop()
-
-    result = df_profile.copy()
+    result = df.copy()
     result["similarity"] = similarities
-    result = result.sort_values("similarity", ascending=False).head(TOP_N)
 
-    sim_min = result["similarity"].min()
-    sim_max = result["similarity"].max()
+    result = (
+        result
+        .sort_values("similarity", ascending=False)
+        .head(TOP_N)
+        .copy()
+    )
 
-    if sim_max == sim_min:
-        result["match_percent"] = 85
-    else:
-        result["match_percent"] = (
-            70 + (result["similarity"] - sim_min) / (sim_max - sim_min) * 28
-        ).round().astype(int)
-
-    result["match_percent"] = result["match_percent"].clip(70, 98)
+    # Directly convert cosine similarity (0-1) to Match percentage.
+    result["match_percent"] = (
+        result["similarity"]
+        .clip(0, 1)
+        .mul(100)
+        .round()
+        .astype(int)
+    )
 
     st.markdown("## ⭐ Recommended Attractions")
 
@@ -672,15 +547,27 @@ if st.session_state.selected_keywords:
 
     for idx, (_, row) in enumerate(result.iterrows()):
         place_name = clean_place_name(row["location_name"])
-        pos_items = parse_aspects(row.get("positive_top10", ""))
+        pos_items = parse_aspects(
+            row.get("positive_top10", "")
+        )
         img_path = get_local_image_path(place_name)
 
         intro = safe_text(row.get("intro", ""))
-        address = safe_text(row.get("english_address", ""))
+        address = safe_text(
+            row.get("english_address", "")
+        )
         good_to_know = get_good_to_know(row)
 
         rank = idx + 1
-        medal = "🥇" if rank == 1 else "🥈" if rank == 2 else "🥉" if rank == 3 else f"{rank}."
+
+        if rank == 1:
+            medal = "🥇"
+        elif rank == 2:
+            medal = "🥈"
+        elif rank == 3:
+            medal = "🥉"
+        else:
+            medal = f"{rank}."
 
         with card_cols[idx % 2]:
             with st.container(border=True):
@@ -688,20 +575,28 @@ if st.session_state.selected_keywords:
 
                 st.markdown(
                     f"""
-                    <div class="place-title">{medal} {html.escape(place_name)}</div>
-                    <div class="match-text">⭐ {row["match_percent"]}% Match</div>
+                    <div class="place-title">
+                        {medal} {html.escape(place_name)}
+                    </div>
+                    <div class="match-text">
+                        ⭐ {row["match_percent"]}% Match
+                    </div>
                     """,
-                    unsafe_allow_html=True
+                    unsafe_allow_html=True,
                 )
 
-                if "avg_rating" in row.index and pd.notna(row["avg_rating"]):
+                if (
+                    "avg_rating" in row.index
+                    and pd.notna(row["avg_rating"])
+                ):
                     st.markdown(
                         f"""
                         <div class="rating-text">
-                            ⭐ Visitor Rating: {float(row["avg_rating"]):.1f}/5.0
+                            ⭐ Visitor Rating:
+                            {float(row["avg_rating"]):.1f}/5.0
                         </div>
                         """,
-                        unsafe_allow_html=True
+                        unsafe_allow_html=True,
                     )
 
                 if intro:
@@ -711,7 +606,7 @@ if st.session_state.selected_keywords:
                             {html.escape(intro)}
                         </div>
                         """,
-                        unsafe_allow_html=True
+                        unsafe_allow_html=True,
                     )
 
                 if address:
@@ -721,37 +616,48 @@ if st.session_state.selected_keywords:
                             📍 {html.escape(address)}
                         </div>
                         """,
-                        unsafe_allow_html=True
+                        unsafe_allow_html=True,
                     )
 
                 st.markdown(
-                    '<div class="section-label">✨ Highlights</div>',
-                    unsafe_allow_html=True
+                    '<div class="section-label">'
+                    '✨ Highlights'
+                    '</div>',
+                    unsafe_allow_html=True,
                 )
+
                 st.markdown(
-                    highlight_badges(pos_items, limit=5),
-                    unsafe_allow_html=True
+                    highlight_badges(
+                        pos_items,
+                        limit=5,
+                    ),
+                    unsafe_allow_html=True,
                 )
 
                 if good_to_know:
                     st.markdown(
-                        '<div class="section-label">💡 Good to Know</div>',
-                        unsafe_allow_html=True
+                        '<div class="section-label">'
+                        '💡 Good to Know'
+                        '</div>',
+                        unsafe_allow_html=True,
                     )
+
                     st.markdown(
                         f"""
                         <div class="tip-box">
                             {html.escape(good_to_know)}
                         </div>
                         """,
-                        unsafe_allow_html=True
+                        unsafe_allow_html=True,
                     )
 
 else:
     st.markdown("## How it works")
     st.write(
-        "This system builds positive and negative aspect profiles for each tourist attraction "
-        "using ABSA results extracted from tourist reviews. "
-        "User preferences and attraction profiles are represented with SBERT embeddings, "
-        "and recommendations are ranked by cosine similarity."
+        "This system builds positive aspect profiles for each "
+        "tourist attraction using ABSA results extracted from "
+        "tourist reviews. User preferences and tourist attractions "
+        "are represented as aspect vectors, and recommendations are "
+        "ranked using cosine similarity. The cosine similarity score "
+        "is multiplied by 100 and displayed as Match (%)."
     )
