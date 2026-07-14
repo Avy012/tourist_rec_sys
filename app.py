@@ -1,4 +1,8 @@
 import os
+
+# Disable hf_transfer before importing Hugging Face-related libraries.
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+
 import re
 import base64
 import html
@@ -6,9 +10,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from sentence_transformers import SentenceTransformer
-
-
-os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
 
 st.set_page_config(
     page_title="SmartTrip AI",
@@ -177,25 +178,19 @@ st.markdown("""
 def load_data():
     return pd.read_csv("data/tourist_profile_data.csv")
 
-@st.cache_resource(show_spinner="Loading recommendation model...")
+@st.cache_resource(show_spinner=False)
 def load_sbert_model():
-    print("1. before model")
+    """Load SBERT only when recommendations are requested."""
+    hf_token = st.secrets.get("HF_TOKEN", None)
 
-    model = SentenceTransformer(
+    return SentenceTransformer(
         "sentence-transformers/all-MiniLM-L6-v2",
+        token=hf_token,
         device="cpu"
     )
 
-    print("2. after model")
-
-    return model
-
 
 df = load_data()
-
-print("before model")
-model = load_sbert_model()
-print("after model")
 
 
 # =========================
@@ -372,23 +367,29 @@ def prepare_profiles(df):
     return temp
 
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def encode_profiles(profile_texts):
+    """Encode attraction profiles after the model has been loaded lazily."""
+    model = load_sbert_model()
+
     embeddings = model.encode(
-        profile_texts,
+        list(profile_texts),
         normalize_embeddings=True,
-        convert_to_numpy=True
+        convert_to_numpy=True,
+        show_progress_bar=False
     )
     return embeddings
 
 
 def calculate_sbert_match(selected_keywords, profile_embeddings, df_profile):
+    model = load_sbert_model()
     user_text = build_user_text(selected_keywords)
 
     user_embedding = model.encode(
         [user_text],
         normalize_embeddings=True,
-        convert_to_numpy=True
+        convert_to_numpy=True,
+        show_progress_bar=False
     )
 
     sbert_sim = np.dot(profile_embeddings, user_embedding[0])
@@ -431,7 +432,6 @@ def toggle_keyword(value):
 # Prepare profile embeddings
 # =========================
 df_profile = prepare_profiles(df)
-# profile_embeddings = encode_profiles(df_profile["profile_text"].tolist())
 
 
 # =========================
@@ -486,11 +486,17 @@ else:
 # Recommendation results
 # =========================
 if st.session_state.selected_keywords:
-    similarities = calculate_sbert_match(
-    st.session_state.selected_keywords,
-    profile_embeddings,
-    df_profile
-)
+    # Load SBERT only after the user selects at least one preference.
+    with st.spinner("Loading recommendation model..."):
+        profile_embeddings = encode_profiles(
+            tuple(df_profile["profile_text"].tolist())
+        )
+
+        similarities = calculate_sbert_match(
+            st.session_state.selected_keywords,
+            profile_embeddings,
+            df_profile
+        )
 
     result = df_profile.copy()
     result["similarity"] = similarities
