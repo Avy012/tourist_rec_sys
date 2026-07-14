@@ -171,7 +171,7 @@ st.markdown("""
     color: #334155;
     font-size: 14px;
     line-height: 1.75;
-    height: 110px;
+    height: 75px;
     box-sizing: border-box;
     overflow-y: auto;
 }
@@ -516,7 +516,6 @@ def highlight_badges(items, limit=5):
 def parse_topic_dict(value):
     empty = {
         "positive": None,
-        "neutral": None,
         "negative": None,
     }
 
@@ -540,7 +539,7 @@ def parse_topic_dict(value):
 
     result = {}
 
-    for sentiment in ["positive", "neutral", "negative"]:
+    for sentiment in ["positive", "negative"]:
         item = parsed.get(sentiment)
 
         if not isinstance(item, dict):
@@ -567,13 +566,12 @@ def visitor_insights_html(topic_value):
 
     config = {
         "positive": ("😊", "Positive"),
-        "neutral": ("😐", "Neutral"),
         "negative": ("🙁", "Negative"),
     }
 
     rows = []
 
-    for sentiment in ["positive", "neutral", "negative"]:
+    for sentiment in ["positive", "negative"]:
         item = topics[sentiment]
 
         if item is None:
