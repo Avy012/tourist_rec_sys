@@ -592,22 +592,6 @@ def render_card(row: pd.Series, rank: int) -> None:
 
     with st.container(border=True):
         render_image(place_name)
-
-        st.markdown(
-            f"""
-            <div class="place-title">{rank_badge(rank)} {escape(place_name)}</div>
-            <div class="match-text">⭐ {int(row['match_percent'])}% Match</div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        rating = row.get("avg_rating")
-        if pd.notna(rating):
-            st.markdown(
-                f'<div class="rating-text">⭐ Visitor Rating: {float(rating):.1f}/5.0</div>',
-                unsafe_allow_html=True,
-            )
-
         # Location name
         st.markdown(
             f'<div class="place-title">{rank_badge(rank)} {escape(place_name)}</div>',
