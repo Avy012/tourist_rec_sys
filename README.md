@@ -60,14 +60,6 @@ gpt_4_1_mini.py
 
 TripAdvisor 리뷰에 대해 GPT-4.1 mini를 이용하여 수행한 ABSA 결과입니다.
 
-| 컬럼 |
-|------|
-| reviewID |
-| review_text |
-| aspect |
-| sentiment |
-| status |
-
 ---
 
 ### ② profile.csv
@@ -79,13 +71,6 @@ normalize_aspects.py
 ```
 
 관광지별 aspect 및 sentiment 빈도를 집계한 데이터입니다.
-
-| 컬럼 |
-|------|
-| location_name |
-| aspect |
-| sentiment |
-| count |
 
 ---
 
@@ -99,11 +84,6 @@ normalize_aspects.py
 
 다양한 aspect 표현을 대표 관광 카테고리(Canonical Aspect)로 정규화한 매핑 테이블입니다.
 
-| 컬럼 |
-|------|
-| aspect |
-| canonical_aspect |
-
 ---
 
 ### ④ tourist_profile_normalized.csv
@@ -115,14 +95,6 @@ normalize_aspects.py
 ```
 
 Canonical Aspect가 적용된 관광지 프로필입니다.
-
-| 컬럼 |
-|------|
-| location_name |
-| aspect |
-| canonical_aspect |
-| sentiment |
-| count |
 
 ---
 
@@ -136,17 +108,6 @@ normalize_aspects.py
 
 추천 시스템에서 사용하는 관광지 프로필 데이터입니다.
 
-| 컬럼 |
-|------|
-| location_name |
-| positive_top10 |
-| negative_top10 |
-| avg_rating |
-| english_address |
-| intro |
-| OWI |
-| topic |
-
 ---
 
 ### ⑥ tourist_profile_data_with_tips.csv
@@ -158,59 +119,7 @@ generate_good_to_know.py
 ```
 
 최종 추천 시스템에서 사용하는 데이터입니다.
-
 Good to Know 정보가 추가됩니다.
-
-| 컬럼 |
-|------|
-| location_name |
-| positive_top10 |
-| negative_top10 |
-| avg_rating |
-| english_address |
-| intro |
-| OWI |
-| topic |
-| good_to_know |
-
----
-
-# 데이터 생성 과정
-
-```text
-          tourist_metadata.csv
-                    +
-           TripAdvisor Reviews
-                    │
-                    ▼
-            gpt_4_1_mini.py
-                    │
-                    ▼
-             full_aspect.csv
-                    │
-                    ▼
-        normalize_aspects.py
-                    │
-      ┌─────────────┼─────────────┐
-      │             │             │
-      ▼             ▼             ▼
- profile.csv  aspect_category_map.csv
-                    │
-                    ▼
-   tourist_profile_normalized.csv
-                    │
-                    ▼
-      tourist_profile_data.csv
-                    │
-                    ▼
-    generate_good_to_know.py
-                    │
-                    ▼
-tourist_profile_data_with_tips.csv
-                    │
-                    ▼
-                 app.py
-```
 
 ---
 
@@ -245,29 +154,3 @@ streamlit run app.py
 ```
 
 ---
-
-# 추천 시스템 구조
-
-추천 시스템은 다음과 같은 과정을 통해 관광지를 추천합니다.
-
-```text
-TripAdvisor Review
-        │
-        ▼
-LLM 기반 Aspect-Based Sentiment Analysis
-        │
-        ▼
-Aspect 정규화
-        │
-        ▼
-관광지 프로필 생성
-        │
-        ▼
-사용자 선호 Aspect 선택
-        │
-        ▼
-Cosine Similarity 계산
-        │
-        ▼
-Top-N 관광지 추천
-```
