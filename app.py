@@ -247,8 +247,6 @@ INSIGHT_PATH = (
     "data/Visitor_Insights_Keywords_OWI_v4.csv"
 )
 
-INSIGHT_SHEET_NAME = "Visitor Insights (long)"
-
 
 KEYWORDS = [
     "Scenery",
@@ -581,8 +579,7 @@ def load_data():
     )
 
     raw_insight_df = pd.read_csv(
-        INSIGHT_PATH,
-        sheet_name=INSIGHT_SHEET_NAME,
+        INSIGHT_PATH
     )
 
     prepared_insight_df = prepare_insight_data(
