@@ -608,24 +608,57 @@ def render_card(row: pd.Series, rank: int) -> None:
                 unsafe_allow_html=True,
             )
 
-        if intro:
-            st.markdown(f'<div class="intro-text">{escape(intro)}</div>', unsafe_allow_html=True)
+        # Location name
+        st.markdown(
+            f'<div class="place-title">{rank_badge(rank)} {escape(place_name)}</div>',
+            unsafe_allow_html=True,
+        )
+
+        # Address
         if address:
-            st.markdown(f'<div class="address-text">📍 {escape(address)}</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="address-text">📍 {escape(address)}</div>',
+                unsafe_allow_html=True,
+            )
+
+        # Match
+        st.markdown(
+            f'<div class="match-text">⭐ {int(row["match_percent"])}% Match</div>',
+            unsafe_allow_html=True,
+        )
+
+        # Rating
+        rating = row.get("avg_rating")
+        if pd.notna(rating):
+            st.markdown(
+                f'<div class="rating-text">⭐ Visitor Rating: {float(rating):.1f}/5.0</div>',
+                unsafe_allow_html=True,
+            )
+
+        # Description
+        if intro:
+            st.markdown(
+                f'<div class="intro-text">{escape(intro)}</div>',
+                unsafe_allow_html=True,
+            )
+        section_label("✨ Highlights")
+        st.markdown(
+            highlight_badges(highlights),
+            unsafe_allow_html=True,
+        )
 
         section_label("💬 Visitor Insights")
         insight_markup = visitor_insights_html(row.get("topic"))
+
         st.markdown(
-            insight_markup or '<div class="insight-box"><span class="small-note">No visitor insight data available</span></div>',
+            insight_markup
+            or '<div class="insight-box"><span class="small-note">No visitor insight data available</span></div>',
             unsafe_allow_html=True,
         )
 
         overcrowding_markup = owi_html(row.get("OWI"))
         if overcrowding_markup:
             st.markdown(overcrowding_markup, unsafe_allow_html=True)
-
-        section_label("✨ Highlights")
-        st.markdown(highlight_badges(highlights), unsafe_allow_html=True)
 
         section_label("💡 Good to Know")
         note = safe_text(row.get("good_to_know"))
