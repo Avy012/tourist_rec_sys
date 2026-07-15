@@ -197,7 +197,7 @@ st.markdown(
     .insight-phrase {
         color: #64748B;
         font-size: 13px;
-    }
+    }INSIGHT_PATH
 
     .owi-box {
         border-radius: 16px;
@@ -243,8 +243,8 @@ TOP_N = 6
 
 PROFILE_CSV_PATH = "data/tourist_profile_data_with_tips.csv"
 
-INSIGHT_XLSX_PATH = (
-    "data/Visitor_Insights_Keywords_OWI_v4.xlsx"
+INSIGHT_PATH = (
+    "data/Visitor_Insights_Keywords_OWI_v4.csv"
 )
 
 INSIGHT_SHEET_NAME = "Visitor Insights (long)"
@@ -570,18 +570,18 @@ def load_data():
             f"{PROFILE_CSV_PATH}"
         )
 
-    if not os.path.exists(INSIGHT_XLSX_PATH):
+    if not os.path.exists(INSIGHT_PATH):
         raise FileNotFoundError(
             f"Visitor Insights Excel file not found: "
-            f"{INSIGHT_XLSX_PATH}"
+            f"{INSIGHT_PATH}"
         )
 
     profile_df = pd.read_csv(
         PROFILE_CSV_PATH
     )
 
-    raw_insight_df = pd.read_excel(
-        INSIGHT_XLSX_PATH,
+    raw_insight_df = pd.read_csv(
+        INSIGHT_PATH,
         sheet_name=INSIGHT_SHEET_NAME,
     )
 
