@@ -143,8 +143,8 @@ st.markdown(
 
     .section-label {
         font-weight: 850;
-        margin-top: 16px;
-        margin-bottom: 7px;
+        margin-top: 10px;
+        margin-bottom: 6px;
         color: #111827;
     }
 
@@ -175,8 +175,8 @@ st.markdown(
         color: #334155;
         font-size: 14px;
         line-height: 1.55;
-        min-height: 92px;
-        max-height: 180px;
+        min-height: unset;
+        max-height: none;
         box-sizing: border-box;
         overflow-y: auto;
     }
@@ -202,8 +202,8 @@ st.markdown(
     .owi-box {
         border-radius: 16px;
         padding: 12px 15px;
-        margin-top: 8px;
-        margin-bottom: 12px;
+        margin-top: 12px;
+        margin-bottom: 14px;
         font-size: 14px;
         font-weight: 750;
     }
