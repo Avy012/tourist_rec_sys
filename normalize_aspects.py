@@ -13,7 +13,7 @@ from openai import OpenAI
 # =========================
 ABSA_CSV = "data/full_aspect.csv"
 TRIPADVISOR_CSV = "data/tripadvisor.csv"
-ADDRESS_CSV = "data/tourist_address_with_intro.csv"
+METADATA_CSV = "data/tourist_metadata.csv"
 
 PROFILE_CSV = "data/profile.csv"
 NORMALIZED_CSV = "data/tourist_profile_normalized.csv"
@@ -307,7 +307,7 @@ def build_tourist_profile_data():
 
     norm = pd.read_csv(NORMALIZED_CSV)
     og = pd.read_csv(TRIPADVISOR_CSV)
-    address = pd.read_csv(ADDRESS_CSV)
+    metadata = pd.read_csv(METADATA_CSV)
 
     norm = norm[norm["canonical_aspect"].str.lower() != "others"].copy()
 
@@ -411,31 +411,44 @@ def build_tourist_profile_data():
         how="left"
     )
 
-    if "location_name" in address.columns:
-        address_key = "location_name"
-    else:
-        raise ValueError("Address file must contain location_name.")
+    required_metadata_columns = [
+        "location_name",
+        "english_address",
+        "intro",
+        "OWI",
+        "topic",
+    ]
 
-    if "english_address" in address.columns:
-        english_address_col = "english_address"
-    elif "English Address" in address.columns:
-        english_address_col = "English Address"
-    else:
-        english_address_col = None
+    missing_metadata_columns = [
+        column
+        for column in required_metadata_columns
+        if column not in metadata.columns
+    ]
 
-    if english_address_col:
-        tourist_profile["english_address"] = tourist_profile["location_name"].map(
-            address.set_index(address_key)[english_address_col]
+    if missing_metadata_columns:
+        raise ValueError(
+            "Missing columns in tourist_metadata.csv: "
+            + ", ".join(missing_metadata_columns)
         )
-    else:
-        tourist_profile["english_address"] = ""
 
-    if "intro" in address.columns:
-        tourist_profile["intro"] = tourist_profile["location_name"].map(
-            address.set_index(address_key)["intro"]
+    metadata = metadata[required_metadata_columns].copy()
+
+    if metadata["location_name"].duplicated().any():
+        duplicated_names = metadata.loc[
+            metadata["location_name"].duplicated(keep=False),
+            "location_name"
+        ].tolist()
+
+        raise ValueError(
+            f"Duplicate location_name values in metadata: {duplicated_names}"
         )
-    else:
-        tourist_profile["intro"] = ""
+
+    tourist_profile = tourist_profile.merge(
+        metadata,
+        on="location_name",
+        how="left",
+        validate="one_to_one"
+    )
 
     tourist_profile.to_csv(
         FINAL_PROFILE_CSV,

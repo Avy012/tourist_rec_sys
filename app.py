@@ -25,7 +25,6 @@ st.set_page_config(
 
 TOP_N = 6
 PROFILE_CSV_PATH = Path("data/tourist_profile_data_with_tips.csv")
-INSIGHT_CSV_PATH = Path("data/Visitor_Insights_Keywords_OWI_v4.csv")
 IMAGE_DIR = Path("images")
 
 SENTIMENTS = ("positive", "neutral", "negative")
@@ -222,12 +221,6 @@ def clean_place_name(place_name: Any) -> str:
     """Remove a leading numeric prefix such as '1. '."""
     return re.sub(r"^\s*\d+\s*\.\s*", "", safe_text(place_name)).strip()
 
-
-def normalize_place_name(place_name: Any) -> str:
-    """Create a stable lowercase merge key for attraction names."""
-    return re.sub(r"\s+", " ", clean_place_name(place_name)).strip().lower()
-
-
 def escape(value: Any) -> str:
     return html.escape(safe_text(value))
 
@@ -236,71 +229,6 @@ def ensure_columns(df: pd.DataFrame, required: Iterable[str], source_name: str) 
     missing = [column for column in required if column not in df.columns]
     if missing:
         raise ValueError(f"Missing columns in {source_name}: {', '.join(missing)}")
-
-
-# =========================================================
-# Insight preprocessing
-# =========================================================
-def prepare_insight_data(raw_df: pd.DataFrame) -> pd.DataFrame:
-    required = ["Attraction", "OWI", "Insight", "Sentiment", "Display Phrase", "Share %"]
-    ensure_columns(raw_df, required, "Visitor Insights CSV")
-
-    df = raw_df.copy()
-
-    for column in ("Attraction", "Insight", "Display Phrase"):
-        df[column] = df[column].fillna("").astype(str).str.strip()
-
-    df["Sentiment"] = df["Sentiment"].fillna("").astype(str).str.strip().str.lower()
-    df["Share %"] = pd.to_numeric(df["Share %"], errors="coerce").fillna(0.0)
-    df["OWI"] = pd.to_numeric(df["OWI"], errors="coerce")
-
-    df = df[
-        df["Sentiment"].isin(SENTIMENTS)
-        & df["Attraction"].ne("")
-        & df["Insight"].ne("")
-    ].copy()
-
-    if df.empty:
-        return pd.DataFrame(columns=["merge_name", "OWI", "topic"])
-
-    df["merge_name"] = df["Attraction"].map(normalize_place_name)
-
-    top_rows = (
-        df.sort_values(
-            ["merge_name", "Sentiment", "Share %"],
-            ascending=[True, True, False],
-            kind="stable",
-        )
-        .drop_duplicates(["merge_name", "Sentiment"], keep="first")
-    )
-
-    topic_series = top_rows.groupby("merge_name", sort=False).apply(build_topic_dict)
-    topic_df = topic_series.rename("topic").reset_index()
-
-    owi_df = (
-        df.dropna(subset=["OWI"])
-        .drop_duplicates("merge_name", keep="first")[["merge_name", "OWI"]]
-    )
-
-    return topic_df.merge(owi_df, on="merge_name", how="left", validate="one_to_one")
-
-
-def build_topic_dict(group: pd.DataFrame) -> dict[str, dict[str, Any] | None]:
-    result: dict[str, dict[str, Any] | None] = {sentiment: None for sentiment in SENTIMENTS}
-
-    for _, row in group.iterrows():
-        sentiment = safe_text(row["Sentiment"]).lower()
-        if sentiment not in result:
-            continue
-
-        result[sentiment] = {
-            "topic": safe_text(row["Insight"]),
-            "phrase": safe_text(row["Display Phrase"]),
-            "share": float(row["Share %"]),
-        }
-
-    return result
-
 
 # =========================================================
 # Profile loading and vector preparation
@@ -354,33 +282,43 @@ def build_attraction_vector(positive_top10: Any) -> np.ndarray:
 
 
 @st.cache_data
-def load_data(profile_path: str, insight_path: str) -> tuple[pd.DataFrame, np.ndarray]:
+def load_data(profile_path: str) -> tuple[pd.DataFrame, np.ndarray]:
     profile_file = Path(profile_path)
-    insight_file = Path(insight_path)
 
     if not profile_file.exists():
-        raise FileNotFoundError(f"Profile data file not found: {profile_file}")
-    if not insight_file.exists():
-        raise FileNotFoundError(f"Visitor Insights CSV file not found: {insight_file}")
+        raise FileNotFoundError(
+            f"Profile data file not found: {profile_file}"
+        )
 
     profile_df = pd.read_csv(profile_file)
-    insight_df = prepare_insight_data(pd.read_csv(insight_file))
 
     validate_profile_data(profile_df)
 
-    profile_df = profile_df.copy()
-    profile_df["merge_name"] = profile_df["location_name"].map(normalize_place_name)
-    profile_df = profile_df.drop(columns=["OWI", "topic"], errors="ignore")
+    required_columns = [
+        "location_name",
+        "positive_top10",
+        "negative_top10",
+        "avg_rating",
+        "english_address",
+        "intro",
+        "OWI",
+        "topic",
+        "good_to_know",
+    ]
 
-    merged = profile_df.merge(
-        insight_df[["merge_name", "OWI", "topic"]],
-        on="merge_name",
-        how="left",
-        validate="one_to_one",
-    ).drop(columns="merge_name")
+    ensure_columns(
+        profile_df,
+        required_columns,
+        "profile CSV"
+    )
 
-    attraction_matrix = np.vstack(merged["positive_top10"].map(build_attraction_vector))
-    return merged, attraction_matrix
+    attraction_matrix = np.vstack(
+        profile_df["positive_top10"].map(
+            build_attraction_vector
+        )
+    )
+
+    return profile_df, attraction_matrix
 
 
 def build_user_vector(selected_keywords: list[str]) -> np.ndarray:
@@ -690,10 +628,10 @@ def main() -> None:
         st.session_state.selected_keywords = []
 
     try:
-        df, attraction_matrix = load_data(str(PROFILE_CSV_PATH), str(INSIGHT_CSV_PATH))
+        df, attraction_matrix = load_data(str(PROFILE_CSV_PATH))
     except FileNotFoundError as exc:
         st.error(str(exc))
-        st.info("Check that both CSV files exist in the data folder and that their filenames match the settings.")
+        st.info("Check the profile CSV files exist in the data folder and that their filenames match the settings.")
         st.stop()
     except ValueError as exc:
         st.error(str(exc))

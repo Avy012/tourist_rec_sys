@@ -8,6 +8,7 @@ tripadvisor.csv
 full_aspect.csv
 
 # after 'normalized_aspects.py'
-aspect_category_map.csv
 profile.csv
+aspect_category_map.csv
 tourist_profile_normalized.csv
+tourist_profile_data.csv
