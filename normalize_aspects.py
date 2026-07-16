@@ -323,7 +323,7 @@ def build_tourist_profile_data():
 
 
     # 관광지별 positive 상위 10개 canonical aspect
-    positive_top10 = (
+    positive = (
         aggregated[
             aggregated["sentiment"] == "positive"
         ]
@@ -332,12 +332,11 @@ def build_tourist_profile_data():
             ascending=[True, False]
         )
         .groupby("location_name")
-        .head(10)
     )
 
 
     # 관광지별 negative 상위 10개 canonical aspect
-    negative_top10 = (
+    negative = (
         aggregated[
             aggregated["sentiment"] == "negative"
         ]
@@ -346,11 +345,37 @@ def build_tourist_profile_data():
             ascending=[True, False]
         )
         .groupby("location_name")
-        .head(10)
     )
 
+    # 관광지별 모든 positive canonical aspect
+    positive = (
+        aggregated[
+            aggregated["sentiment"] == "positive"
+        ]
+        .sort_values(
+            ["location_name", "count"],
+            ascending=[True, False]
+        )
+        .copy()
+    )
+
+
+    # 관광지별 모든 negative canonical aspect
+    negative = (
+        aggregated[
+            aggregated["sentiment"] == "negative"
+        ]
+        .sort_values(
+            ["location_name", "count"],
+            ascending=[True, False]
+        )
+        .copy()
+    )
+
+
+    # 관광지별 positive aspect를 하나의 문자열로 저장
     positive_summary = (
-        positive_top10
+        positive
         .groupby("location_name")
         .apply(
             lambda x: ", ".join(
@@ -361,11 +386,13 @@ def build_tourist_profile_data():
                 )
             )
         )
-        .reset_index(name="positive_top10")
+        .reset_index(name="positive")
     )
 
+
+    # 관광지별 negative aspect를 하나의 문자열로 저장
     negative_summary = (
-        negative_top10
+        negative
         .groupby("location_name")
         .apply(
             lambda x: ", ".join(
@@ -376,8 +403,9 @@ def build_tourist_profile_data():
                 )
             )
         )
-        .reset_index(name="negative_top10")
+        .reset_index(name="negative")
     )
+
 
     tourist_profile = positive_summary.merge(
         negative_summary,

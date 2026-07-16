@@ -60,20 +60,20 @@ Rules:
 def generate_good_to_know_chunk(rows, max_retries=3):
     items = []
 
-    for idx, location_name, negative_top10 in rows:
-        negative_top10 = clean_text(negative_top10)
+    for idx, location_name, negative in rows:
+        negative = clean_text(negative)
 
-        if negative_top10 == "":
+        if negative == "":
             items.append({
                 "row_index": str(idx),
                 "location_name": location_name,
-                "negative_top10": "None"
+                "negative": "None"
             })
         else:
             items.append({
                 "row_index": str(idx),
                 "location_name": location_name,
-                "negative_top10": negative_top10
+                "negative": negative
             })
 
     user_prompt = f"""
@@ -99,7 +99,7 @@ Places:
 
             cleaned = {}
 
-            for idx, location_name, negative_top10 in rows:
+            for idx, location_name, negative in rows:
                 idx_str = str(idx)
 
                 default_tip = (
@@ -125,7 +125,7 @@ Places:
             "Most visitors describe this place positively overall. "
             "It is still a good idea to check the location, opening hours, and nearby transportation before visiting."
         )
-        for idx, location_name, negative_top10 in rows
+        for idx, location_name, negative in rows
     }
 
 
@@ -145,7 +145,7 @@ for i, row in df.iterrows():
     remaining_rows.append((
         i,
         row["location_name"],
-        row.get("negative_top10", "")
+        row.get("negative", "")
     ))
 
 print("Total rows:", len(df))

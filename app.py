@@ -236,7 +236,7 @@ def ensure_columns(df: pd.DataFrame, required: Iterable[str], source_name: str) 
 def validate_profile_data(df: pd.DataFrame) -> None:
     ensure_columns(
         df,
-        ["location_name", "positive_top10", "negative_top10", "intro"],
+        ["location_name", "positive", "negative", "intro"],
         "profile CSV",
     )
 
@@ -272,9 +272,9 @@ def parse_aspects(value: Any) -> list[tuple[str, float]]:
     return parsed
 
 
-def build_attraction_vector(positive_top10: Any) -> np.ndarray:
+def build_attraction_vector(positive: Any) -> np.ndarray:
     vector = np.zeros(len(KEYWORDS), dtype=float)
-    for aspect, count in parse_aspects(positive_top10):
+    for aspect, count in parse_aspects(positive):
         index = ASPECT_INDEX.get(aspect)
         if index is not None:
             vector[index] += count
@@ -296,8 +296,8 @@ def load_data(profile_path: str) -> tuple[pd.DataFrame, np.ndarray]:
 
     required_columns = [
         "location_name",
-        "positive_top10",
-        "negative_top10",
+        "positive",
+        "negative",
         "avg_rating",
         "english_address",
         "intro",
@@ -313,7 +313,7 @@ def load_data(profile_path: str) -> tuple[pd.DataFrame, np.ndarray]:
     )
 
     attraction_matrix = np.vstack(
-        profile_df["positive_top10"].map(
+        profile_df["positive"].map(
             build_attraction_vector
         )
     )
@@ -526,7 +526,7 @@ def render_card(row: pd.Series, rank: int) -> None:
     place_name = clean_place_name(row.get("location_name"))
     intro = safe_text(row.get("intro"))
     address = safe_text(row.get("english_address"))
-    highlights = parse_aspects(row.get("positive_top10"))
+    highlights = parse_aspects(row.get("positive"))
 
     with st.container(border=True):
         render_image(place_name)
