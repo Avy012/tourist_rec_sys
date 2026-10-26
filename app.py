@@ -595,35 +595,38 @@ def render_card(row: pd.Series, rank: int) -> None:
         st.markdown(f'<div class="tip-box">{note_markup}</div>', unsafe_allow_html=True)
 
 
-def render_recommendations(
-    df: pd.DataFrame, attraction_matrix: np.ndarray, selected: list[str]
-) -> None:
-    st.markdown("## ⭐ Recommended Attractions")
+def render_result_count(total: int) -> int:
     control_column, detail_column = st.columns([3, 2], gap="large")
-    presets = {f"Top {count}": count for count in (3, 6, 9) if count < len(df)}
-    presets["All"] = len(df)
+    presets = {f"Top {count}": count for count in (3, 6, 9) if count < total}
+    presets["All"] = total
     with control_column:
         choice = st.pills(
-            "Results to show",
+            "Number of recommendations · Top N",
             options=[*presets, "Custom"],
             default="Top 6" if "Top 6" in presets else "All",
             key="result_count_choice",
-            label_visibility="collapsed",
         )
     with detail_column:
         if choice == "Custom":
             top_n = int(st.number_input(
                 "Custom result count",
                 min_value=1,
-                max_value=len(df),
-                value=min(DEFAULT_TOP_N, len(df)),
+                max_value=total,
+                value=min(DEFAULT_TOP_N, total),
                 step=1,
                 key="custom_top_n",
                 label_visibility="collapsed",
             ))
         else:
-            top_n = presets.get(choice, min(DEFAULT_TOP_N, len(df)))
-        st.caption(f"{top_n} of {len(df)} attractions · Best matches first")
+            top_n = presets.get(choice, min(DEFAULT_TOP_N, total))
+        st.caption(f"{top_n} of {total} attractions · Best matches first")
+    return top_n
+
+
+def render_recommendations(
+    df: pd.DataFrame, attraction_matrix: np.ndarray, selected: list[str], top_n: int
+) -> None:
+    st.markdown("## ⭐ Recommended Attractions")
 
     result = df.copy()
     result["similarity"] = calculate_cosine_scores(selected, attraction_matrix)
@@ -687,8 +690,9 @@ def main() -> None:
     )
 
     selected = render_keyword_selector()
+    top_n = render_result_count(len(df))
     if selected:
-        render_recommendations(df, attraction_matrix, selected)
+        render_recommendations(df, attraction_matrix, selected, top_n)
     else:
         render_initial_explanation()
 
