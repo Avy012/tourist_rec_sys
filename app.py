@@ -23,7 +23,7 @@ st.set_page_config(
     layout="wide",
 )
 
-TOP_N = 6
+DEFAULT_TOP_N = 6
 PROFILE_CSV_PATH = Path("data/tourist_profile_data_with_tips.csv")
 IMAGE_DIR = Path("images")
 
@@ -111,6 +111,9 @@ APP_CSS = """
 .place-title { font-size: 23px; font-weight: 850; color: #1E3A5F; margin-bottom: 4px; }
 .match-text { font-size: 16px; font-weight: 800; color: #2563EB; margin-bottom: 8px; }
 .rating-text { font-size: 15px; font-weight: 750; color: #374151; margin-bottom: 10px; }
+.place-title { height: 70px; line-height: 1.5; overflow-y: auto; }
+.address-text { height: 42px; overflow-y: auto; }
+.highlights-box { height: 92px; overflow-y: auto; }
 
 .intro-text {
     color: #374151;
@@ -162,6 +165,8 @@ APP_CSS = """
     font-size: 14px;
     line-height: 1.55;
     box-sizing: border-box;
+    height: 150px;
+    overflow-y: auto;
 }
 .insight-row { margin: 4px 0; }
 .insight-label { font-weight: 750; }
@@ -169,6 +174,9 @@ APP_CSS = """
 .insight-phrase { color: #64748B; font-size: 13px; }
 
 .owi-box {
+    height: 70px;
+    box-sizing: border-box;
+    overflow-y: auto;
     border-radius: 16px;
     padding: 12px 15px;
     margin: 12px 0 14px;
@@ -178,6 +186,7 @@ APP_CSS = """
 .owi-high { background-color: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
 .owi-medium { background-color: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
 .owi-low { background-color: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; }
+.owi-unavailable { background-color: #F8FAFC; border: 1px solid #CBD5E1; color: #64748B; }
 
 .tip-box {
     background-color: #FFF7ED;
@@ -191,8 +200,6 @@ APP_CSS = """
     height: 110px;
     box-sizing: border-box;
     overflow-y: auto;
-    display: flex;
-    align-items: center;
 }
 </style>
 """
@@ -537,11 +544,10 @@ def render_card(row: pd.Series, rank: int) -> None:
         )
 
         # Address
-        if address:
-            st.markdown(
-                f'<div class="address-text">📍 {escape(address)}</div>',
-                unsafe_allow_html=True,
-            )
+        st.markdown(
+            f'<div class="address-text">📍 {escape(address) if address else "Address unavailable"}</div>',
+            unsafe_allow_html=True,
+        )
 
         # Match
         st.markdown(
@@ -551,21 +557,20 @@ def render_card(row: pd.Series, rank: int) -> None:
 
         # Rating
         rating = row.get("avg_rating")
-        if pd.notna(rating):
-            st.markdown(
-                f'<div class="rating-text">⭐ Visitor Rating: {float(rating):.1f}/5.0</div>',
-                unsafe_allow_html=True,
-            )
+        rating_text = f"{float(rating):.1f}/5.0" if pd.notna(rating) else "Unavailable"
+        st.markdown(
+            f'<div class="rating-text">⭐ Visitor Rating: {rating_text}</div>',
+            unsafe_allow_html=True,
+        )
 
         # Description
-        if intro:
-            st.markdown(
-                f'<div class="intro-text">{escape(intro)}</div>',
-                unsafe_allow_html=True,
-            )
+        st.markdown(
+            f'<div class="intro-text">{escape(intro) if intro else "Description unavailable"}</div>',
+            unsafe_allow_html=True,
+        )
         section_label("✨ Highlights")
         st.markdown(
-            highlight_badges(highlights),
+            f'<div class="highlights-box">{highlight_badges(highlights)}</div>',
             unsafe_allow_html=True,
         )
 
@@ -579,8 +584,10 @@ def render_card(row: pd.Series, rank: int) -> None:
         )
 
         overcrowding_markup = owi_html(row.get("OWI"))
-        if overcrowding_markup:
-            st.markdown(overcrowding_markup, unsafe_allow_html=True)
+        st.markdown(
+            overcrowding_markup or '<div class="owi-box owi-unavailable">OWI: Unavailable</div>',
+            unsafe_allow_html=True,
+        )
 
         section_label("💡 Good to Know")
         note = safe_text(row.get("good_to_know"))
@@ -588,18 +595,46 @@ def render_card(row: pd.Series, rank: int) -> None:
         st.markdown(f'<div class="tip-box">{note_markup}</div>', unsafe_allow_html=True)
 
 
-def render_recommendations(df: pd.DataFrame, attraction_matrix: np.ndarray, selected: list[str]) -> None:
+def render_recommendations(
+    df: pd.DataFrame, attraction_matrix: np.ndarray, selected: list[str]
+) -> None:
+    st.markdown("## ⭐ Recommended Attractions")
+    control_column, detail_column = st.columns([3, 2], gap="large")
+    presets = {f"Top {count}": count for count in (3, 6, 9) if count < len(df)}
+    presets["All"] = len(df)
+    with control_column:
+        choice = st.pills(
+            "Results to show",
+            options=[*presets, "Custom"],
+            default="Top 6" if "Top 6" in presets else "All",
+            key="result_count_choice",
+            label_visibility="collapsed",
+        )
+    with detail_column:
+        if choice == "Custom":
+            top_n = int(st.number_input(
+                "Custom result count",
+                min_value=1,
+                max_value=len(df),
+                value=min(DEFAULT_TOP_N, len(df)),
+                step=1,
+                key="custom_top_n",
+                label_visibility="collapsed",
+            ))
+        else:
+            top_n = presets.get(choice, min(DEFAULT_TOP_N, len(df)))
+        st.caption(f"{top_n} of {len(df)} attractions · Best matches first")
+
     result = df.copy()
     result["similarity"] = calculate_cosine_scores(selected, attraction_matrix)
-    result = result.nlargest(TOP_N, "similarity").copy()
+    result = result.nlargest(top_n, "similarity").copy()
     result["match_percent"] = (result["similarity"].clip(0, 1) * 100).round().astype(int)
 
-    st.markdown("## ⭐ Recommended Attractions")
-    columns = st.columns(2)
-
-    for rank, (_, row) in enumerate(result.iterrows(), start=1):
-        with columns[(rank - 1) % 2]:
-            render_card(row, rank)
+    for start in range(0, len(result), 2):
+        columns = st.columns(2)
+        for offset, (_, row) in enumerate(result.iloc[start:start + 2].iterrows()):
+            with columns[offset]:
+                render_card(row, start + offset + 1)
 
 
 def render_initial_explanation() -> None:
