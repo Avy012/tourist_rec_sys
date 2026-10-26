@@ -552,6 +552,7 @@ def render_keyword_selector() -> list[str]:
 
 def render_card(row: pd.Series, rank: int) -> None:
     place_name = clean_place_name(row.get("location_name"))
+    place_id = safe_text(row.get("location_name"))
     intro = safe_text(row.get("intro"))
     address = safe_text(row.get("english_address"))
     highlights = parse_aspects(row.get("positive"))
@@ -562,6 +563,15 @@ def render_card(row: pd.Series, rank: int) -> None:
         st.markdown(
             f'<div class="place-title">{rank_badge(rank)} {escape(place_name)}</div>',
             unsafe_allow_html=True,
+        )
+        saved = place_id in st.session_state.saved_places
+        st.button(
+            "♥ Saved" if saved else "♡ Save",
+            key=f"favorite_{place_id}",
+            type="primary" if saved else "secondary",
+            on_click=toggle_saved_place,
+            args=(place_id,),
+            help="Remove from saved places" if saved else "Add to saved places",
         )
 
         # Address
@@ -614,6 +624,55 @@ def render_card(row: pd.Series, rank: int) -> None:
         note = safe_text(row.get("good_to_know"))
         note_markup = escape(note) if note else '<span class="small-note">No additional travel notes available</span>'
         st.markdown(f'<div class="tip-box">{note_markup}</div>', unsafe_allow_html=True)
+
+
+def toggle_saved_place(place_id: str) -> None:
+    saved = st.session_state.saved_places
+    if place_id in saved:
+        saved.remove(place_id)
+    else:
+        saved.append(place_id)
+
+
+def render_saved_places(df: pd.DataFrame) -> None:
+    saved_ids = st.session_state.saved_places
+    with st.expander(f"♥ Saved places ({len(saved_ids)})"):
+        st.caption("Saved for this session. Download your list to keep it for later.")
+        if not saved_ids:
+            st.info("Tap ♡ Save on an attraction to build your travel shortlist.")
+            return
+
+        saved_df = df[df["location_name"].isin(saved_ids)].copy()
+        saved_df["saved_order"] = saved_df["location_name"].map(
+            {place_id: index for index, place_id in enumerate(saved_ids)}
+        )
+        saved_df = saved_df.sort_values("saved_order")
+        for _, row in saved_df.iterrows():
+            place_id = safe_text(row["location_name"])
+            detail, action = st.columns([4, 1])
+            with detail:
+                st.markdown(f"**{escape(clean_place_name(place_id))}**")
+                address = safe_text(row.get("english_address"))
+                if address:
+                    st.caption(f"📍 {address}")
+                rating = row.get("avg_rating")
+                if pd.notna(rating):
+                    st.caption(f"⭐ {float(rating):.1f}/5.0")
+            with action:
+                st.button(
+                    "Remove", key=f"remove_saved_{place_id}",
+                    on_click=toggle_saved_place, args=(place_id,),
+                )
+
+        export_columns = ["location_name", "english_address", "avg_rating", "intro", "OWI", "good_to_know"]
+        export_df = saved_df[export_columns].copy()
+        export_df["location_name"] = export_df["location_name"].map(clean_place_name)
+        st.download_button(
+            "↓ Download saved places (CSV)",
+            data=export_df.to_csv(index=False).encode("utf-8-sig"),
+            file_name="smarttrip_saved_places.csv",
+            mime="text/csv",
+        )
 
 
 def remember_result_choice() -> None:
@@ -708,6 +767,8 @@ def toggle_keyword(value: str) -> None:
 def main() -> None:
     if "selected_keywords" not in st.session_state:
         st.session_state.selected_keywords = []
+    if "saved_places" not in st.session_state:
+        st.session_state.saved_places = []
 
     try:
         df, attraction_matrix = load_data(str(PROFILE_CSV_PATH))
@@ -733,6 +794,7 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
+    render_saved_places(df)
     selected = render_keyword_selector()
     if selected:
         top_n = render_result_count(len(df))
