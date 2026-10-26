@@ -608,15 +608,16 @@ def render_result_count(total: int) -> int:
         )
     with detail_column:
         if choice == "Custom":
-            top_n = int(st.number_input(
-                "Custom result count",
-                min_value=1,
-                max_value=total,
-                value=min(DEFAULT_TOP_N, total),
-                step=1,
-                key="custom_top_n",
-                label_visibility="collapsed",
-            ))
+            compact_column, _ = st.columns([1, 1])
+            with compact_column:
+                top_n = st.selectbox(
+                    "Custom result count",
+                    options=range(1, total + 1),
+                    index=min(DEFAULT_TOP_N, total) - 1,
+                    format_func=lambda count: f"Top {count}",
+                    key="custom_result_count",
+                    label_visibility="collapsed",
+                )
         else:
             top_n = presets.get(choice, min(DEFAULT_TOP_N, total))
         st.caption(f"{top_n} of {total} attractions · Best matches first")
