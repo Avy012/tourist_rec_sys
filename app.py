@@ -533,7 +533,8 @@ def section_label(label: str) -> None:
 
 
 def rank_badge(rank: int) -> str:
-    return {1: "🥇", 2: "🥈", 3: "🥉"}.get(rank, f"{rank}.")
+    # Avoid "4. Name", which button Markdown interprets as a numbered list.
+    return {1: "🥇", 2: "🥈", 3: "🥉"}.get(rank, f"#{rank}")
 
 
 # =========================================================
