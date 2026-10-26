@@ -533,8 +533,7 @@ def section_label(label: str) -> None:
 
 
 def rank_badge(rank: int) -> str:
-    # Avoid "4. Name", which button Markdown interprets as a numbered list.
-    return {1: "🥇", 2: "🥈", 3: "🥉"}.get(rank, f"#{rank}")
+    return {1: "🥇", 2: "🥈", 3: "🥉"}.get(rank, f"{rank}.")
 
 
 # =========================================================
@@ -569,6 +568,7 @@ def render_keyword_selector() -> list[str]:
 
 
 def render_card(row: pd.Series, rank: int) -> None:
+    rank_label = rank_badge(rank).replace(".", "\\.")
     place_id = safe_text(row.get("location_name"))
     place_name = clean_place_name(place_id)
     rating = row.get("avg_rating")
@@ -576,7 +576,7 @@ def render_card(row: pd.Series, rank: int) -> None:
     with st.container(border=True):
         render_image(place_name)
         if st.button(
-            f"{rank_badge(rank)} {place_name}", key=f"card_title_{rank}",
+            f"{rank_label} {place_name}", key=f"card_title_{rank}",
             use_container_width=True,
         ):
             render_place_details(row, rank)
@@ -696,14 +696,13 @@ def render_saved_places(df: pd.DataFrame) -> None:
             place_id = safe_text(row["location_name"])
             detail, action = st.columns([4, 1])
             with detail:
-                if st.button(clean_place_name(place_id), key=f"saved_details_{place_id}"):
-                    render_place_details(row)
-                address = safe_text(row.get("english_address"))
-                if address:
-                    st.caption(f"📍 {address}")
                 rating = row.get("avg_rating")
-                if pd.notna(rating):
-                    st.caption(f"⭐ {float(rating):.1f}/5.0")
+                rating_label = f"⭐ {float(rating):.1f}/5" if pd.notna(rating) else "Rating unavailable"
+                if st.button(
+                    f"{clean_place_name(place_id)} · {rating_label}",
+                    key=f"saved_details_{place_id}", use_container_width=True,
+                ):
+                    render_place_details(row)
             with action:
                 st.button(
                     "Remove", key=f"remove_saved_{place_id}",
