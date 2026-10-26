@@ -513,9 +513,10 @@ def render_keyword_selector() -> list[str]:
         label = f"{prefix}{ASPECT_EMOJI.get(aspect, '✨')} {aspect}"
 
         with columns[index % 5]:
-            if st.button(label, key=f"kw_{aspect}", use_container_width=True):
-                toggle_keyword(aspect)
-                st.rerun()
+            st.button(
+                label, key=f"kw_{aspect}", use_container_width=True,
+                on_click=toggle_keyword, args=(aspect,),
+            )
 
     selected_keywords = st.session_state.selected_keywords
     if selected_keywords:
@@ -595,27 +596,48 @@ def render_card(row: pd.Series, rank: int) -> None:
         st.markdown(f'<div class="tip-box">{note_markup}</div>', unsafe_allow_html=True)
 
 
+def remember_result_choice() -> None:
+    choice = st.session_state.result_count_choice
+    if choice is None:
+        st.session_state.result_count_choice = st.session_state.saved_result_choice
+    else:
+        st.session_state.saved_result_choice = choice
+
+
+def remember_custom_count() -> None:
+    st.session_state.saved_custom_count = st.session_state.custom_result_count
+
+
 def render_result_count(total: int) -> int:
     control_column, detail_column = st.columns([3, 2], gap="large")
     presets = {f"Top {count}": count for count in (3, 6, 9) if count < total}
     presets["All"] = total
+    default_choice = "Top 6" if "Top 6" in presets else "All"
+    if "saved_result_choice" not in st.session_state:
+        st.session_state.saved_result_choice = default_choice
+    if "saved_custom_count" not in st.session_state:
+        st.session_state.saved_custom_count = min(DEFAULT_TOP_N, total)
+    if "result_count_choice" not in st.session_state:
+        st.session_state.result_count_choice = st.session_state.saved_result_choice
     with control_column:
         choice = st.pills(
             "Number of recommendations · Top N",
             options=[*presets, "Custom"],
-            default="Top 6" if "Top 6" in presets else "All",
             key="result_count_choice",
+            on_change=remember_result_choice,
         )
     with detail_column:
         if choice == "Custom":
             compact_column, _ = st.columns([1, 1])
             with compact_column:
+                if "custom_result_count" not in st.session_state:
+                    st.session_state.custom_result_count = st.session_state.saved_custom_count
                 top_n = st.selectbox(
                     "Custom result count",
                     options=range(1, total + 1),
-                    index=min(DEFAULT_TOP_N, total) - 1,
                     format_func=lambda count: f"Top {count}",
                     key="custom_result_count",
+                    on_change=remember_custom_count,
                     label_visibility="collapsed",
                 )
         else:
@@ -691,8 +713,8 @@ def main() -> None:
     )
 
     selected = render_keyword_selector()
-    top_n = render_result_count(len(df))
     if selected:
+        top_n = render_result_count(len(df))
         render_recommendations(df, attraction_matrix, selected, top_n)
     else:
         render_initial_explanation()
