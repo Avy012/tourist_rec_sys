@@ -155,6 +155,26 @@ APP_CSS = """
 .section-label { font-weight: 850; margin: 10px 0 6px; color: #111827; }
 .small-note { color: #64748B; font-size: 14px; }
 
+.st-key-result_count_controls [data-testid="stHorizontalBlock"] {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+}
+.st-key-result_count_controls [data-testid="stColumn"]:first-child {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+}
+.st-key-result_count_controls [data-testid="stColumn"]:last-child {
+    flex: 0 0 115px;
+    width: 115px;
+    min-width: 0;
+}
+.st-key-result_count_controls [data-testid="stPills"] { margin-bottom: 0; }
+@media (max-width: 460px) {
+    .st-key-result_count_controls [data-testid="stHorizontalBlock"] { flex-wrap: wrap; }
+}
+
 .insight-box {
     background-color: #F8FAFC;
     border: 1px solid #CBD5E1;
@@ -609,7 +629,6 @@ def remember_custom_count() -> None:
 
 
 def render_result_count(total: int) -> int:
-    control_column, detail_column = st.columns([3, 2], gap="large")
     presets = {f"Top {count}": count for count in (3, 6, 9) if count < total}
     presets["All"] = total
     default_choice = "Top 6" if "Top 6" in presets else "All"
@@ -619,17 +638,19 @@ def render_result_count(total: int) -> int:
         st.session_state.saved_custom_count = min(DEFAULT_TOP_N, total)
     if "result_count_choice" not in st.session_state:
         st.session_state.result_count_choice = st.session_state.saved_result_choice
-    with control_column:
-        choice = st.pills(
-            "Number of recommendations · Top N",
-            options=[*presets, "Custom"],
-            key="result_count_choice",
-            on_change=remember_result_choice,
-        )
-    with detail_column:
-        if choice == "Custom":
-            compact_column, _ = st.columns([1, 1])
-            with compact_column:
+    st.caption("Number of recommendations · Top N")
+    with st.container(key="result_count_controls"):
+        control_column, custom_column = st.columns([3, 1], gap="small")
+        with control_column:
+            choice = st.pills(
+                "Number of recommendations · Top N",
+                options=[*presets, "Custom"],
+                key="result_count_choice",
+                on_change=remember_result_choice,
+                label_visibility="collapsed",
+            )
+        with custom_column:
+            if choice == "Custom":
                 if "custom_result_count" not in st.session_state:
                     st.session_state.custom_result_count = st.session_state.saved_custom_count
                 top_n = st.selectbox(
@@ -640,9 +661,9 @@ def render_result_count(total: int) -> int:
                     on_change=remember_custom_count,
                     label_visibility="collapsed",
                 )
-        else:
-            top_n = presets.get(choice, min(DEFAULT_TOP_N, total))
-        st.caption(f"{top_n} of {total} attractions · Best matches first")
+            else:
+                top_n = presets.get(choice, min(DEFAULT_TOP_N, total))
+    st.caption(f"{top_n} of {total} attractions · Best matches first")
     return top_n
 
 
