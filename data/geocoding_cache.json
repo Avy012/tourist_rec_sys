@@ -1,0 +1,1515 @@
+{
+  "Gyeongbokgung Palace": [
+    {
+      "place_id": 426827079,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 5501517,
+      "lat": "37.5797540",
+      "lon": "126.9766818",
+      "category": "historic",
+      "type": "castle",
+      "place_rank": 30,
+      "importance": 0.4950112988463731,
+      "addresstype": "historic",
+      "name": "경복궁",
+      "display_name": "경복궁, 청와대로, 궁정동, 청운효자동, 종로구, 서울특별시, 03048, 대한민국",
+      "boundingbox": [
+        "37.5758655",
+        "37.5836670",
+        "126.9737550",
+        "126.9800491"
+      ]
+    }
+  ],
+  "Everland": [
+    {
+      "place_id": 416708499,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 13798001801,
+      "lat": "37.2921701",
+      "lon": "127.2015089",
+      "category": "leisure",
+      "type": "park",
+      "place_rank": 24,
+      "importance": 0.08006094377050428,
+      "addresstype": "park",
+      "name": "Everland",
+      "display_name": "Everland, 처인구, 용인시, 경기도, 17023, 대한민국",
+      "boundingbox": [
+        "37.2921201",
+        "37.2922201",
+        "127.2014589",
+        "127.2015589"
+      ]
+    }
+  ],
+  "Haeundae Beach": [
+    {
+      "place_id": 268226198,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 107531972,
+      "lat": "35.1577809",
+      "lon": "129.1581318",
+      "category": "natural",
+      "type": "beach",
+      "place_rank": 22,
+      "importance": 0.3202715765630289,
+      "addresstype": "beach",
+      "name": "해운대 해수욕장",
+      "display_name": "해운대 해수욕장, 우1동, 해운대구, 부산광역시, 대한민국",
+      "boundingbox": [
+        "35.1556554",
+        "35.1596393",
+        "129.1543963",
+        "129.1698984"
+      ]
+    }
+  ],
+  "Busan Gamcheon Culture Village": [
+    {
+      "place_id": 270170235,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 382693934,
+      "lat": "35.0963371",
+      "lon": "129.0087897",
+      "category": "tourism",
+      "type": "attraction",
+      "place_rank": 30,
+      "importance": 0.2548773901198179,
+      "addresstype": "tourism",
+      "name": "감천문화마을",
+      "display_name": "감천문화마을, 천해로, 감천동, 감천2동, 사하구, 부산광역시, 49374, 대한민국",
+      "boundingbox": [
+        "35.0931341",
+        "35.0994464",
+        "129.0066503",
+        "129.0109449"
+      ]
+    }
+  ],
+  "Starfield COEX Mall": [],
+  "513, Yeongdong-daero, Gangnam-gu, Seoul": [
+    {
+      "place_id": 222080979,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 12192172874,
+      "lat": "37.5125275",
+      "lon": "127.0588489",
+      "category": "amenity",
+      "type": "restaurant",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "amenity",
+      "name": "르사이공 코엑스몰점",
+      "display_name": "르사이공 코엑스몰점, 513, 영동대로, 삼성동, 삼성1동, 강남구, 서울특별시, 06164, 대한민국",
+      "boundingbox": [
+        "37.5124775",
+        "37.5125775",
+        "127.0587989",
+        "127.0588989"
+      ]
+    }
+  ],
+  "Seongsan Ilchulbong": [
+    {
+      "place_id": 223449609,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 351324682,
+      "lat": "33.4584403",
+      "lon": "126.9414363",
+      "category": "natural",
+      "type": "wood",
+      "place_rank": 30,
+      "importance": 0.31243468429384014,
+      "addresstype": "natural",
+      "name": "성산일출해양도립공원",
+      "display_name": "성산일출해양도립공원, 284-12, 일출로, 성산리, 성산읍, 서귀포시, 제주특별자치도, 63643, 대한민국",
+      "boundingbox": [
+        "33.4555577",
+        "33.4612665",
+        "126.9359359",
+        "126.9452693"
+      ]
+    }
+  ],
+  "Lotte World Tower & Mall": [],
+  "240, Olympic-ro, Songpa-gu, Seoul": [
+    {
+      "place_id": 222112542,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 26281660,
+      "lat": "37.5114987",
+      "lon": "127.0982387",
+      "category": "shop",
+      "type": "mall",
+      "place_rank": 30,
+      "importance": 0.4323180864899549,
+      "addresstype": "shop",
+      "name": "롯데월드",
+      "display_name": "롯데월드, 240, 올림픽로, 잠실3동, 송파구, 서울특별시, 05554, 대한민국",
+      "boundingbox": [
+        "37.5101942",
+        "37.5124363",
+        "127.0959015",
+        "127.1005896"
+      ]
+    }
+  ],
+  "Dongdaemun Design Plaza (DDP)": [
+    {
+      "place_id": 222318557,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 10647068,
+      "lat": "37.5670686",
+      "lon": "127.0098990",
+      "category": "building",
+      "type": "public",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "building",
+      "name": "동대문디자인플라자",
+      "display_name": "동대문디자인플라자, 281, 을지로, 동대문패션타운, 을지로7가, 광희동, 중구, 서울특별시, 04566, 대한민국",
+      "boundingbox": [
+        "37.5658286",
+        "37.5683055",
+        "127.0086215",
+        "127.0107231"
+      ]
+    }
+  ],
+  "Starfield Library": [
+    {
+      "place_id": 223160572,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 5185480724,
+      "lat": "37.5101676",
+      "lon": "127.0600884",
+      "category": "amenity",
+      "type": "library",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "amenity",
+      "name": "별마당도서관",
+      "display_name": "별마당도서관, 테헤란로87길, 삼성동, 삼성1동, 강남구, 서울특별시, 06169, 대한민국",
+      "boundingbox": [
+        "37.5101176",
+        "37.5102176",
+        "127.0600384",
+        "127.0601384"
+      ]
+    }
+  ],
+  "Seoraksan National Park": [
+    {
+      "place_id": 270675392,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 17335482,
+      "lat": "38.1340905",
+      "lon": "128.4172172",
+      "category": "boundary",
+      "type": "national_park",
+      "place_rank": 25,
+      "importance": 0.33935777253266924,
+      "addresstype": "national_park",
+      "name": "설악산 국립공원",
+      "display_name": "설악산 국립공원, 인제군, 강원특별자치도, 대한민국",
+      "boundingbox": [
+        "38.0040944",
+        "38.2640709",
+        "128.2554860",
+        "128.5837338"
+      ]
+    }
+  ],
+  "Haedong Yonggungsa": [
+    {
+      "place_id": 270162578,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 382701819,
+      "lat": "35.1884335",
+      "lon": "129.2229764",
+      "category": "amenity",
+      "type": "place_of_worship",
+      "place_rank": 30,
+      "importance": 0.24632300460320036,
+      "addresstype": "amenity",
+      "name": "해동용궁사",
+      "display_name": "해동용궁사, 용궁길, 기장읍, 기장군, 부산광역시, 46084, 대한민국",
+      "boundingbox": [
+        "35.1879526",
+        "35.1888494",
+        "129.2223166",
+        "129.2238314"
+      ]
+    }
+  ],
+  "Myeongdong Shopping Street": [
+    {
+      "place_id": 222854493,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 12894590901,
+      "lat": "37.5627106",
+      "lon": "126.9847070",
+      "category": "tourism",
+      "type": "attraction",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "tourism",
+      "name": "Myeongdong Shopping Street",
+      "display_name": "Myeongdong Shopping Street, 명동8길, 명동2가, 명동, 중구, 서울특별시, 04536, 대한민국",
+      "boundingbox": [
+        "37.5626606",
+        "37.5627606",
+        "126.9846570",
+        "126.9847570"
+      ]
+    }
+  ],
+  "Spirited Garden": [
+    {
+      "place_id": 223517125,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 371667202,
+      "lat": "33.3252630",
+      "lon": "126.2549289",
+      "category": "tourism",
+      "type": "theme_park",
+      "place_rank": 30,
+      "importance": 5.871900511172682e-05,
+      "addresstype": "tourism",
+      "name": "생각하는 정원",
+      "display_name": "생각하는 정원, 녹차분재로, 저지리, 한경면, 제주시, 제주특별자치도, 63005, 대한민국",
+      "boundingbox": [
+        "33.3241111",
+        "33.3263350",
+        "126.2538513",
+        "126.2561904"
+      ]
+    }
+  ],
+  "Namsan Park": [
+    {
+      "place_id": 222629856,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 244397333,
+      "lat": "37.5504617",
+      "lon": "126.9916008",
+      "category": "natural",
+      "type": "wood",
+      "place_rank": 22,
+      "importance": 0.10673964675364307,
+      "addresstype": "wood",
+      "name": "남산공원",
+      "display_name": "남산공원, 중구, 서울특별시, 04340, 대한민국",
+      "boundingbox": [
+        "37.5410281",
+        "37.5598171",
+        "126.9816609",
+        "127.0040720"
+      ]
+    }
+  ],
+  "Bongeunsa Temple": [
+    {
+      "place_id": 223244089,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 74010857,
+      "lat": "37.5151321",
+      "lon": "127.0567944",
+      "category": "amenity",
+      "type": "place_of_worship",
+      "place_rank": 30,
+      "importance": 0.3489254561527194,
+      "addresstype": "amenity",
+      "name": "봉은사",
+      "display_name": "봉은사, 531, 봉은사로, 삼성동, 삼성1동, 강남구, 서울특별시, 06087, 대한민국",
+      "boundingbox": [
+        "37.5137142",
+        "37.5166304",
+        "127.0550560",
+        "127.0589381"
+      ]
+    }
+  ],
+  "Gwangalli Beach": [
+    {
+      "place_id": 270193370,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 107642460,
+      "lat": "35.1508879",
+      "lon": "129.1167806",
+      "category": "natural",
+      "type": "beach",
+      "place_rank": 22,
+      "importance": 0.30289193994832775,
+      "addresstype": "beach",
+      "name": "광안리해수욕장",
+      "display_name": "광안리해수욕장, 광안2동, 수영구, 부산광역시, 대한민국",
+      "boundingbox": [
+        "35.1464237",
+        "35.1553504",
+        "129.1145048",
+        "129.1236922"
+      ]
+    }
+  ],
+  "Bulguksa Temple": [
+    {
+      "place_id": 269671087,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 382655135,
+      "lat": "35.7889948",
+      "lon": "129.3308902",
+      "category": "amenity",
+      "type": "place_of_worship",
+      "place_rank": 30,
+      "importance": 0.45875346312934534,
+      "addresstype": "amenity",
+      "name": "불국사",
+      "display_name": "불국사, 385, 불국로, 진현동, 불국동, 경주시, 경상북도, 38127, 대한민국",
+      "boundingbox": [
+        "35.7871102",
+        "35.7909157",
+        "129.3290274",
+        "129.3339671"
+      ]
+    }
+  ],
+  "Sea Life Coex Seoul Aquarium": [],
+  "Myeongdong NANTA Theater": [
+    {
+      "place_id": 222851295,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 11012770803,
+      "lat": "37.5635792",
+      "lon": "126.9836608",
+      "category": "amenity",
+      "type": "theatre",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "amenity",
+      "name": "명동난타극장",
+      "display_name": "명동난타극장, 명동길, 명동1가, 명동, 중구, 서울특별시, 04538, 대한민국",
+      "boundingbox": [
+        "37.5635292",
+        "37.5636292",
+        "126.9836108",
+        "126.9837108"
+      ]
+    }
+  ],
+  "National Folk Museum of Korea": [
+    {
+      "place_id": 222786522,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 5501518,
+      "lat": "37.5808343",
+      "lon": "126.9790431",
+      "category": "tourism",
+      "type": "museum",
+      "place_rank": 30,
+      "importance": 0.39727265900251174,
+      "addresstype": "tourism",
+      "name": "국립민속박물관",
+      "display_name": "국립민속박물관, 삼청로, 창성동, 청운효자동, 종로구, 서울특별시, 03062, 대한민국",
+      "boundingbox": [
+        "37.5794405",
+        "37.5824219",
+        "126.9779174",
+        "126.9800491"
+      ]
+    }
+  ],
+  "Hwaseong Fortress": [
+    {
+      "place_id": 225906116,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 11821148698,
+      "lat": "37.2876277",
+      "lon": "126.9964957",
+      "category": "tourism",
+      "type": "attraction",
+      "place_rank": 30,
+      "importance": 6.484397650106076e-05,
+      "addresstype": "tourism",
+      "name": "숙지산 화성 채석장",
+      "display_name": "숙지산 화성 채석장, 수성로, 화서동, 팔달구, 수원시, 경기도, 16318, 대한민국",
+      "boundingbox": [
+        "37.2875777",
+        "37.2876777",
+        "126.9964457",
+        "126.9965457"
+      ]
+    }
+  ],
+  "BIFF Square": [
+    {
+      "place_id": 269791021,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 4524166889,
+      "lat": "35.0988987",
+      "lon": "129.0290545",
+      "category": "tourism",
+      "type": "attraction",
+      "place_rank": 30,
+      "importance": 7.220035095745812e-05,
+      "addresstype": "tourism",
+      "name": "BIFF 광장 Streed Food",
+      "display_name": "BIFF 광장 Streed Food, 남포길, 남포동3가, 남포동, 중구, 부산광역시, 48983, 대한민국",
+      "boundingbox": [
+        "35.0988487",
+        "35.0989487",
+        "129.0290045",
+        "129.0291045"
+      ]
+    }
+  ],
+  "N Seoul Tower": [
+    {
+      "place_id": 422895111,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 14007758601,
+      "lat": "37.5349513",
+      "lon": "126.9870892",
+      "category": "tourism",
+      "type": "viewpoint",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "tourism",
+      "name": "Viewpoint of the N Seoul Tower",
+      "display_name": "Viewpoint of the N Seoul Tower, 녹사평대로, 용산동4가, 이태원2동, 용산구, 서울특별시, 04345, 대한민국",
+      "boundingbox": [
+        "37.5349013",
+        "37.5350013",
+        "126.9870392",
+        "126.9871392"
+      ]
+    }
+  ],
+  "Korean Folk Village": [
+    {
+      "place_id": 223318237,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 392288060,
+      "lat": "37.2594792",
+      "lon": "127.1210423",
+      "category": "tourism",
+      "type": "theme_park",
+      "place_rank": 30,
+      "importance": 0.3002719692158251,
+      "addresstype": "tourism",
+      "name": "한국민속촌",
+      "display_name": "한국민속촌, 사은로, 보라동, 기흥구, 용인시, 경기도, 17079, 대한민국",
+      "boundingbox": [
+        "37.2557681",
+        "37.2634052",
+        "127.1159887",
+        "127.1251484"
+      ]
+    }
+  ],
+  "Jeongbang Waterfall": [
+    {
+      "place_id": 224486785,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 3739756346,
+      "lat": "33.2448578",
+      "lon": "126.5715451",
+      "category": "waterway",
+      "type": "waterfall",
+      "place_rank": 20,
+      "importance": 0.34045234732906265,
+      "addresstype": "waterfall",
+      "name": "정방폭포",
+      "display_name": "정방폭포, 송산동, 서귀포시, 제주특별자치도, 63597, 대한민국",
+      "boundingbox": [
+        "33.2448078",
+        "33.2449078",
+        "126.5714951",
+        "126.5715951"
+      ]
+    }
+  ],
+  "DMZ": [
+    {
+      "place_id": 223012765,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 601625428,
+      "lat": "38.3072977",
+      "lon": "127.2302394",
+      "category": "place",
+      "type": "square",
+      "place_rank": 25,
+      "importance": 0.06670666742961776,
+      "addresstype": "square",
+      "name": "DMZ 평화문화광장",
+      "display_name": "DMZ 평화문화광장, 중강리, 동송읍, 철원군, 강원특별자치도, 대한민국",
+      "boundingbox": [
+        "38.3061757",
+        "38.3083611",
+        "127.2290600",
+        "127.2315403"
+      ]
+    }
+  ],
+  "Songdo Cable Car": [],
+  "171, Songdohaebyeon-ro, Seo-gu, Busan": [
+    {
+      "place_id": 269764658,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 680031457,
+      "lat": "35.0796867",
+      "lon": "129.0221190",
+      "category": "highway",
+      "type": "tertiary",
+      "place_rank": 26,
+      "importance": 0.0534055336842908,
+      "addresstype": "tertiary",
+      "name": "송도해변로",
+      "display_name": "송도해변로, 암남동, 서구, 부산광역시, 49265, 대한민국",
+      "boundingbox": [
+        "35.0794213",
+        "35.0799345",
+        "129.0219685",
+        "129.0222359"
+      ]
+    }
+  ],
+  "Daepo Haean Jusangjeolli Cliff": [],
+  "36-24, Ieodo-ro, Seogwipo-si, Jeju-do": [
+    {
+      "place_id": 419211147,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 13894069062,
+      "lat": "33.2389016",
+      "lon": "126.4264614",
+      "category": "place",
+      "type": "house",
+      "place_rank": 30,
+      "importance": 5.5001907377691576e-05,
+      "addresstype": "place",
+      "name": "",
+      "display_name": "36-24, 이어도로, 중문동, 서귀포시, 제주특별자치도, 63547, 대한민국",
+      "boundingbox": [
+        "33.2388516",
+        "33.2389516",
+        "126.4264114",
+        "126.4265114"
+      ]
+    }
+  ],
+  "Jogyesa Temple": [
+    {
+      "place_id": 223410887,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 223157537,
+      "lat": "37.5741432",
+      "lon": "126.9819120",
+      "category": "amenity",
+      "type": "place_of_worship",
+      "place_rank": 30,
+      "importance": 0.3759021037005979,
+      "addresstype": "amenity",
+      "name": "조계사",
+      "display_name": "조계사, 55, 우정국로, 종로1가, 견지동, 종로1·2·3·4가동, 종로구, 서울특별시, 03144, 대한민국",
+      "boundingbox": [
+        "37.5734000",
+        "37.5749506",
+        "126.9812894",
+        "126.9827698"
+      ]
+    }
+  ],
+  "Namsangol Hanok Village": [
+    {
+      "place_id": 223116002,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 5498014,
+      "lat": "37.5583498",
+      "lon": "126.9937539",
+      "category": "leisure",
+      "type": "park",
+      "place_rank": 24,
+      "importance": 0.0800729800869764,
+      "addresstype": "park",
+      "name": "남산골공원",
+      "display_name": "남산골공원, 50-8, 필동, 중구, 서울특별시, 04626, 대한민국",
+      "boundingbox": [
+        "37.5567248",
+        "37.5598708",
+        "126.9916834",
+        "126.9953270"
+      ]
+    }
+  ],
+  "Donggung Palace and Wolji Pond": [
+    {
+      "place_id": 269660737,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 477417220,
+      "lat": "35.8347003",
+      "lon": "129.2264375",
+      "category": "leisure",
+      "type": "park",
+      "place_rank": 24,
+      "importance": 0.2946949388609965,
+      "addresstype": "park",
+      "name": "경주 동궁과 월지",
+      "display_name": "경주 동궁과 월지, 월성동, 경주시, 경상북도, 대한민국",
+      "boundingbox": [
+        "35.8334734",
+        "35.8360408",
+        "129.2246365",
+        "129.2281946"
+      ]
+    }
+  ],
+  "Ikseon-dong Hanok Street": [],
+  "33-11, Supyo-ro 28-gil, Jongno-gu": [
+    {
+      "place_id": 223276792,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 329261513,
+      "lat": "37.5728604",
+      "lon": "126.9890328",
+      "category": "highway",
+      "type": "residential",
+      "place_rank": 26,
+      "importance": 0.05340631342030972,
+      "addresstype": "residential",
+      "name": "수표로28길",
+      "display_name": "수표로28길, 익선동 한옥마을 Ikseondong, 낙원동, 종로1·2·3·4가동, 종로구, 서울특별시, 03133, 대한민국",
+      "boundingbox": [
+        "37.5726675",
+        "37.5728605",
+        "126.9885717",
+        "126.9895365"
+      ]
+    }
+  ],
+  "Jeonju Hanok Village": [
+    {
+      "place_id": 223745029,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 13800568701,
+      "lat": "35.8159507",
+      "lon": "127.1530019",
+      "category": "tourism",
+      "type": "museum",
+      "place_rank": 30,
+      "importance": 6.242542153043438e-05,
+      "addresstype": "tourism",
+      "name": "Jeonju Hanok Village History Hall",
+      "display_name": "Jeonju Hanok Village History Hall, 최명희길, 풍남동3가, 완산구, 전주시, 전북특별자치도, 55041, 대한민국",
+      "boundingbox": [
+        "35.8159007",
+        "35.8160007",
+        "127.1529519",
+        "127.1530519"
+      ]
+    }
+  ],
+  "National Museum Of Korea": [
+    {
+      "place_id": 222616993,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 168364800,
+      "lat": "37.5239530",
+      "lon": "126.9803196",
+      "category": "tourism",
+      "type": "museum",
+      "place_rank": 30,
+      "importance": 0.4770418792422841,
+      "addresstype": "tourism",
+      "name": "국립중앙박물관",
+      "display_name": "국립중앙박물관, 137, 서빙고로, 용산동6가, 서빙고동, 용산구, 서울특별시, 04383, 대한민국",
+      "boundingbox": [
+        "37.5233842",
+        "37.5244664",
+        "126.9781141",
+        "126.9826324"
+      ]
+    }
+  ],
+  "Gwanghwamun Gate": [
+    {
+      "place_id": 426826669,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 170199440,
+      "lat": "37.5759259",
+      "lon": "126.9768160",
+      "category": "building",
+      "type": "gatehouse",
+      "place_rank": 30,
+      "importance": 0.41371448961733565,
+      "addresstype": "building",
+      "name": "광화문",
+      "display_name": "광화문, 161, 사직로, 세종로, 사직동, 종로구, 서울특별시, 03045, 대한민국",
+      "boundingbox": [
+        "37.5758655",
+        "37.5759911",
+        "126.9765371",
+        "126.9770981"
+      ]
+    }
+  ],
+  "Seoul Arts Center": [
+    {
+      "place_id": 224454981,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 606624825,
+      "lat": "37.4797475",
+      "lon": "127.0133947",
+      "category": "amenity",
+      "type": "arts_centre",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "amenity",
+      "name": "예술의 전당",
+      "display_name": "예술의 전당, 2406, 남부순환로, 서초3동, 서초구, 서울특별시, 06757, 대한민국",
+      "boundingbox": [
+        "37.4773471",
+        "37.4814853",
+        "127.0099480",
+        "127.0164014"
+      ]
+    }
+  ],
+  "Changgyeonggung Palace": [
+    {
+      "place_id": 222632054,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 380863257,
+      "lat": "37.5802456",
+      "lon": "126.9948331",
+      "category": "historic",
+      "type": "castle",
+      "place_rank": 30,
+      "importance": 0.43033063500823676,
+      "addresstype": "historic",
+      "name": "창경궁",
+      "display_name": "창경궁, 185, 창경궁로, 명륜2가, 혜화동, 종로구, 서울특별시, 03072, 대한민국",
+      "boundingbox": [
+        "37.5763399",
+        "37.5848990",
+        "126.9930297",
+        "126.9970059"
+      ]
+    }
+  ],
+  "Insadong Spa & Sauna": [],
+  "36, Yulgok-ro 6-gil, Jongno-gu, Seoul": [
+    {
+      "place_id": 223157552,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 419812285,
+      "lat": "37.5764467",
+      "lon": "126.9893179",
+      "category": "highway",
+      "type": "residential",
+      "place_rank": 26,
+      "importance": 0.05340631342030972,
+      "addresstype": "residential",
+      "name": "율곡로6길",
+      "display_name": "율곡로6길, 익선동, 종로1·2·3·4가동, 종로구, 서울특별시, 03131, 대한민국",
+      "boundingbox": [
+        "37.5755238",
+        "37.5773717",
+        "126.9892565",
+        "126.9893297"
+      ]
+    }
+  ],
+  "Gyeongju National Museum": [
+    {
+      "place_id": 269788344,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 573218888,
+      "lat": "35.8289946",
+      "lon": "129.2279662",
+      "category": "tourism",
+      "type": "museum",
+      "place_rank": 30,
+      "importance": 0.38885241757642924,
+      "addresstype": "tourism",
+      "name": "국립경주박물관",
+      "display_name": "국립경주박물관, 일정로, 구황동, 월성동, 경주시, 경상북도, 38161, 대한민국",
+      "boundingbox": [
+        "35.8278478",
+        "35.8314300",
+        "129.2264711",
+        "129.2312668"
+      ]
+    }
+  ],
+  "The War and Women's Human Rights Museum": [],
+  "39-6, Seongsan-dong, Mapo-gu, Seoul": [
+    {
+      "place_id": 223625068,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 415153649,
+      "lat": "37.5677500",
+      "lon": "126.9026300",
+      "category": "place",
+      "type": "quarter",
+      "place_rank": 20,
+      "importance": 0.13340631342030973,
+      "addresstype": "quarter",
+      "name": "성산동",
+      "display_name": "성산동, 성산2동, 마포구, 서울특별시, 03937, 대한민국",
+      "boundingbox": [
+        "37.5577500",
+        "37.5777500",
+        "126.8926300",
+        "126.9126300"
+      ]
+    }
+  ],
+  "Woljeonggyo Bridge": [
+    {
+      "place_id": 266826212,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 855882072,
+      "lat": "35.8289470",
+      "lon": "129.2181316",
+      "category": "highway",
+      "type": "footway",
+      "place_rank": 27,
+      "importance": 0.040062486457618056,
+      "addresstype": "road",
+      "name": "Woljeonggyo Bridge",
+      "display_name": "Woljeonggyo Bridge, 인왕동, 월성동, 경주시, 경상북도, 38164, 대한민국",
+      "boundingbox": [
+        "35.8289437",
+        "35.8289504",
+        "129.2181316",
+        "129.2181317"
+      ]
+    }
+  ],
+  "Insadong": [
+    {
+      "place_id": 222827371,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 221977892,
+      "lat": "37.5743714",
+      "lon": "126.9859724",
+      "category": "highway",
+      "type": "residential",
+      "place_rank": 26,
+      "importance": 0.05340631342030972,
+      "addresstype": "residential",
+      "name": "인사동10길",
+      "display_name": "인사동10길, 종로2가, 경운동, 종로1·2·3·4가동, 종로구, 서울특별시, 03148, 대한민국",
+      "boundingbox": [
+        "37.5739023",
+        "37.5745982",
+        "126.9850326",
+        "126.9870015"
+      ]
+    }
+  ],
+  "Aroma Thai Spa Gongdeok": [],
+  "16-10, Dohwa-dong, Mapo-gu, Seoul": [
+    {
+      "place_id": 223027960,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 3884275,
+      "lat": "37.5386394",
+      "lon": "126.9492428",
+      "category": "boundary",
+      "type": "administrative",
+      "place_rank": 16,
+      "importance": 0.29960026554141705,
+      "addresstype": "suburb",
+      "name": "도화동",
+      "display_name": "도화동, 마포구, 서울특별시, 대한민국",
+      "boundingbox": [
+        "37.5337723",
+        "37.5435121",
+        "126.9408923",
+        "126.9566421"
+      ]
+    }
+  ],
+  "Spa Gogyeol": [
+    {
+      "place_id": 221610293,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 11752615950,
+      "lat": "37.5182400",
+      "lon": "127.0422303",
+      "category": "shop",
+      "type": "massage",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "shop",
+      "name": "Spa Gogyeol 스파고결",
+      "display_name": "Spa Gogyeol 스파고결, 13, 선릉로132길, 청담동, 강남구, 서울특별시, 06065, 대한민국",
+      "boundingbox": [
+        "37.5181900",
+        "37.5182900",
+        "127.0421803",
+        "127.0422803"
+      ]
+    }
+  ],
+  "Nami Island": [
+    {
+      "place_id": 223011719,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 238212575,
+      "lat": "37.7917285",
+      "lon": "127.5251440",
+      "category": "place",
+      "type": "islet",
+      "place_rank": 20,
+      "importance": 0.38493605591222957,
+      "addresstype": "islet",
+      "name": "남이섬",
+      "display_name": "남이섬, 남산면, 춘천시, 강원특별자치도, 24464, 대한민국",
+      "boundingbox": [
+        "37.7854253",
+        "37.7981320",
+        "127.5227300",
+        "127.5283656"
+      ]
+    }
+  ],
+  "Lavish Spa": [
+    {
+      "place_id": 223070860,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 6440071885,
+      "lat": "37.5811651",
+      "lon": "127.0047047",
+      "category": "leisure",
+      "type": "sauna",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "leisure",
+      "name": "Lavish Spa",
+      "display_name": "Lavish Spa, 6-6, 동숭3길, 대학로거리, 동숭동, 이화동, 종로구, 서울특별시, 03085, 대한민국",
+      "boundingbox": [
+        "37.5811151",
+        "37.5812151",
+        "127.0046547",
+        "127.0047547"
+      ]
+    }
+  ],
+  "Bugak Palgakjeong Pavilion": [],
+  "267, Bugaksan-ro, Jongno-gu, Seoul": [
+    {
+      "place_id": 223208267,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 37400956,
+      "lat": "37.5955141",
+      "lon": "126.9698196",
+      "category": "highway",
+      "type": "tertiary",
+      "place_rank": 26,
+      "importance": 0.05340631342030972,
+      "addresstype": "tertiary",
+      "name": "북악산로",
+      "display_name": "북악산로, 신영동, 부암동, 종로구, 서울특별시, 03020, 대한민국",
+      "boundingbox": [
+        "37.5931058",
+        "37.5979478",
+        "126.9665623",
+        "126.9708008"
+      ]
+    }
+  ],
+  "The Spa Grand Hyatt Seoul": [],
+  "361, Sowol-ro, Yongsan-gu, Seoul": [
+    {
+      "place_id": 221484711,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 1339697076,
+      "lat": "37.5551564",
+      "lon": "126.9767204",
+      "category": "highway",
+      "type": "secondary",
+      "place_rank": 26,
+      "importance": 0.05340631342030972,
+      "addresstype": "secondary",
+      "name": "소월로",
+      "display_name": "소월로, 후암동, 회현동, 용산구, 서울특별시, 04326, 대한민국",
+      "boundingbox": [
+        "37.5550149",
+        "37.5554745",
+        "126.9766230",
+        "126.9770632"
+      ]
+    }
+  ],
+  "Theyounglong": [],
+  "San14-21, Jangchung-dong 2(i)-ga, Jung-gu, Seoul": [],
+  "The War Memorial of Korea": [
+    {
+      "place_id": 222766353,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 229891123,
+      "lat": "37.5359715",
+      "lon": "126.9772916",
+      "category": "tourism",
+      "type": "museum",
+      "place_rank": 30,
+      "importance": 0.4212966827966051,
+      "addresstype": "tourism",
+      "name": "전쟁기념관",
+      "display_name": "전쟁기념관, 29, 이태원로, 한강로1가, 남영동, 용산구, 서울특별시, 04353, 대한민국",
+      "boundingbox": [
+        "37.5347500",
+        "37.5378582",
+        "126.9750716",
+        "126.9790279"
+      ]
+    }
+  ],
+  "Bukchon Hanok Village": [
+    {
+      "place_id": 223784451,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 2669684119,
+      "lat": "37.5823919",
+      "lon": "126.9858648",
+      "category": "tourism",
+      "type": "attraction",
+      "place_rank": 30,
+      "importance": 0.3250193457146212,
+      "addresstype": "tourism",
+      "name": "북촌한옥마을 ДЕРЕВНЯ",
+      "display_name": "북촌한옥마을 ДЕРЕВНЯ, 북촌로12길, 가회동, 종로구, 서울특별시, 03056, 대한민국",
+      "boundingbox": [
+        "37.5823419",
+        "37.5824419",
+        "126.9858148",
+        "126.9859148"
+      ]
+    }
+  ],
+  "Changdeokgung Palace": [
+    {
+      "place_id": 421274554,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 789965985,
+      "lat": "37.5823872",
+      "lon": "126.9917013",
+      "category": "historic",
+      "type": "castle",
+      "place_rank": 30,
+      "importance": 0.496963370894224,
+      "addresstype": "historic",
+      "name": "창덕궁",
+      "display_name": "창덕궁, 99, 율곡로, 와룡동, 종로1·2·3·4가동, 종로구, 서울특별시, 03072, 대한민국",
+      "boundingbox": [
+        "37.5775782",
+        "37.5875365",
+        "126.9873285",
+        "126.9945381"
+      ]
+    }
+  ],
+  "Cheonggyecheon Stream": [
+    {
+      "place_id": 222604451,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 769631455,
+      "lat": "37.5722871",
+      "lon": "127.0367285",
+      "category": "waterway",
+      "type": "river",
+      "place_rank": 19,
+      "importance": 0.4403473780512054,
+      "addresstype": "river",
+      "name": "청계천",
+      "display_name": "청계천, 동대문구, 서울특별시, 대한민국",
+      "boundingbox": [
+        "37.5527466",
+        "37.5723576",
+        "127.0093071",
+        "127.0521665"
+      ]
+    }
+  ],
+  "코엑스몰": [
+    {
+      "place_id": 222997410,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 12192173497,
+      "lat": "37.5125275",
+      "lon": "127.0588489",
+      "category": "amenity",
+      "type": "restaurant",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "amenity",
+      "name": "무탄 코엑스몰 본점",
+      "display_name": "무탄 코엑스몰 본점, 513, 영동대로, 삼성동, 삼성1동, 강남구, 서울특별시, 06164, 대한민국",
+      "boundingbox": [
+        "37.5124775",
+        "37.5125775",
+        "127.0587989",
+        "127.0588989"
+      ]
+    }
+  ],
+  "성산일출봉": [
+    {
+      "place_id": 224381284,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 330006952,
+      "lat": "33.4588891",
+      "lon": "126.9408178",
+      "category": "natural",
+      "type": "peak",
+      "place_rank": 30,
+      "importance": 0.31243468429384014,
+      "addresstype": "natural",
+      "name": "성산일출봉",
+      "display_name": "성산일출봉, 284-12, 일출로, 성산리, 성산읍, 서귀포시, 제주특별자치도, 63643, 대한민국",
+      "boundingbox": [
+        "33.4588391",
+        "33.4589391",
+        "126.9407678",
+        "126.9408678"
+      ]
+    }
+  ],
+  "코엑스 아쿠아리움": [
+    {
+      "place_id": 225108331,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 2676488130,
+      "lat": "37.5131846",
+      "lon": "127.0586092",
+      "category": "tourism",
+      "type": "aquarium",
+      "place_rank": 30,
+      "importance": 0.25876906166717667,
+      "addresstype": "tourism",
+      "name": "코엑스 아쿠아리움 (COEX Aquarium)",
+      "display_name": "코엑스 아쿠아리움 (COEX Aquarium), 봉은사로, 삼성동, 삼성1동, 강남구, 서울특별시, 06163, 대한민국",
+      "boundingbox": [
+        "37.5131346",
+        "37.5132346",
+        "127.0585592",
+        "127.0586592"
+      ]
+    }
+  ],
+  "수원화성": [
+    {
+      "place_id": 222226493,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 1791243454,
+      "lat": "37.2867876",
+      "lon": "127.0114366",
+      "category": "historic",
+      "type": "castle",
+      "place_rank": 30,
+      "importance": 6.484397650106076e-05,
+      "addresstype": "historic",
+      "name": "수원화성",
+      "display_name": "수원화성, 화서문로17번길, 행리단길, 장안동, 팔달구, 수원시, 경기도, 16272, 대한민국",
+      "boundingbox": [
+        "37.2867376",
+        "37.2868376",
+        "127.0113866",
+        "127.0114866"
+      ]
+    }
+  ],
+  "남산서울타워": [
+    {
+      "place_id": 231154261,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 16474080,
+      "lat": "37.5512692",
+      "lon": "126.9882959",
+      "category": "man_made",
+      "type": "tower",
+      "place_rank": 30,
+      "importance": 0.41081406578491936,
+      "addresstype": "man_made",
+      "name": "남산서울타워",
+      "display_name": "남산서울타워, 105, 남산공원길, 용산동2가, 용산2가동, 용산구, 서울특별시, 04340, 대한민국",
+      "boundingbox": [
+        "37.5509203",
+        "37.5516006",
+        "126.9878132",
+        "126.9886267"
+      ]
+    }
+  ],
+  "제3땅굴": [
+    {
+      "place_id": 222825838,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 445313800,
+      "lat": "37.9175600",
+      "lon": "126.6905256",
+      "category": "highway",
+      "type": "footway",
+      "place_rank": 27,
+      "importance": 0.24158668584662718,
+      "addresstype": "road",
+      "name": "제3땅굴",
+      "display_name": "제3땅굴, 군내면, 파주시, 경기도, 10800, 대한민국",
+      "boundingbox": [
+        "37.9170392",
+        "37.9180847",
+        "126.6843246",
+        "126.6967263"
+      ]
+    }
+  ],
+  "송도해상케이블카": [
+    {
+      "place_id": 270912245,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 667458143,
+      "lat": "35.0689247",
+      "lon": "129.0220234",
+      "category": "aerialway",
+      "type": "gondola",
+      "place_rank": 30,
+      "importance": 7.220035095745812e-05,
+      "addresstype": "aerialway",
+      "name": "송도해상케이블카",
+      "display_name": "송도해상케이블카, 송도해변로, 암남동, 서구, 부산광역시, 49269, 대한민국",
+      "boundingbox": [
+        "35.0615311",
+        "35.0763321",
+        "129.0204406",
+        "129.0235399"
+      ]
+    }
+  ],
+  "대포주상절리": [],
+  "남산골한옥마을": [
+    {
+      "place_id": 223176781,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 4665630597,
+      "lat": "37.5592839",
+      "lon": "126.9944767",
+      "category": "tourism",
+      "type": "attraction",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "tourism",
+      "name": "남산골한옥마을",
+      "display_name": "남산골한옥마을, 28, 퇴계로34길, 필동1가, 필동, 중구, 서울특별시, 04626, 대한민국",
+      "boundingbox": [
+        "37.5592339",
+        "37.5593339",
+        "126.9944267",
+        "126.9945267"
+      ]
+    }
+  ],
+  "전주한옥마을": [
+    {
+      "place_id": 223145203,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 569532829,
+      "lat": "35.8181831",
+      "lon": "127.1530423",
+      "category": "amenity",
+      "type": "parking",
+      "place_rank": 30,
+      "importance": 6.242542153043438e-05,
+      "addresstype": "amenity",
+      "name": "전주한옥마을 실내공영주차장",
+      "display_name": "전주한옥마을 실내공영주차장, 한지길, 풍남동2가, 완산구, 전주시, 전북특별자치도, 55042, 대한민국",
+      "boundingbox": [
+        "35.8178956",
+        "35.8184366",
+        "127.1527351",
+        "127.1533495"
+      ]
+    }
+  ],
+  "전쟁과여성인권박물관": [],
+  "인사동 서울": [
+    {
+      "place_id": 222771392,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 415153837,
+      "lat": "37.5716543",
+      "lon": "126.9864242",
+      "category": "place",
+      "type": "quarter",
+      "place_rank": 20,
+      "importance": 0.39965982201271655,
+      "addresstype": "quarter",
+      "name": "인사동",
+      "display_name": "인사동, 종로1·2·3·4가동, 종로구, 서울특별시, 03164, 대한민국",
+      "boundingbox": [
+        "37.5616543",
+        "37.5816543",
+        "126.9764242",
+        "126.9964242"
+      ]
+    }
+  ],
+  "북악팔각정": [],
+  "그랜드하얏트서울": [
+    {
+      "place_id": 430747830,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 14279430493,
+      "lat": "37.5481957",
+      "lon": "127.0045846",
+      "category": "information",
+      "type": "guidepost",
+      "place_rank": 30,
+      "importance": 7.29800869763793e-05,
+      "addresstype": "information",
+      "name": "그랜드하얏트서울 / 버티고개역",
+      "display_name": "그랜드하얏트서울 / 버티고개역, 입주민 전용, 한남동, 다산동, 용산구, 서울특별시, 04600, 대한민국",
+      "boundingbox": [
+        "37.5481457",
+        "37.5482457",
+        "127.0045346",
+        "127.0046346"
+      ]
+    }
+  ],
+  "스타필드 코엑스몰": [],
+  "롯데월드타워": [
+    {
+      "place_id": 418812102,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 12520558001,
+      "lat": "37.5125537",
+      "lon": "127.1026790",
+      "category": "man_made",
+      "type": "tower",
+      "place_rank": 30,
+      "importance": 0.5069971698639235,
+      "addresstype": "man_made",
+      "name": "롯데월드타워",
+      "display_name": "롯데월드타워, 잠실로, 신천동, 잠실6동, 송파구, 서울특별시, 05551, 대한민국",
+      "boundingbox": [
+        "37.5125037",
+        "37.5126037",
+        "127.1026290",
+        "127.1027290"
+      ]
+    }
+  ],
+  "전쟁과 여성인권 박물관": [],
+  "북악 팔각정": [
+    {
+      "place_id": 222712273,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 298518901,
+      "lat": "37.6017059",
+      "lon": "126.9806936",
+      "category": "leisure",
+      "type": "park",
+      "place_rank": 24,
+      "importance": 0.0800729800869764,
+      "addresstype": "park",
+      "name": "북악 팔각정",
+      "display_name": "북악 팔각정, 성북동, 평창동, 종로구, 서울특별시, 대한민국",
+      "boundingbox": [
+        "37.6013283",
+        "37.6021703",
+        "126.9799857",
+        "126.9815513"
+      ]
+    }
+  ],
+  "Grand Hyatt Seoul": [
+    {
+      "place_id": 223105031,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 228802390,
+      "lat": "37.5395783",
+      "lon": "126.9976508",
+      "category": "tourism",
+      "type": "hotel",
+      "place_rank": 30,
+      "importance": 0.18157831638402872,
+      "addresstype": "tourism",
+      "name": "그랜드하얏트 호텔",
+      "display_name": "그랜드하얏트 호텔, 이태원로55길, 한남동, 용산구, 서울특별시, 04347, 대한민국",
+      "boundingbox": [
+        "37.5383745",
+        "37.5407533",
+        "126.9955055",
+        "126.9994946"
+      ]
+    }
+  ]
+}

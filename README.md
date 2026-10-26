@@ -4,6 +4,14 @@
 
 https://touristrecsys-sfi47ztbuvhvpopq5gin9k.streamlit.app/
 
+## 지도와 찜 목록
+
+- `Map` 화면에서 전체 관광지 또는 찜한 관광지의 위치를 확인하고, 관광지를 선택해 지도를 확대하거나 상세 팝업을 열 수 있습니다.
+- 찜 목록은 세션 상태와 현재 페이지의 `saved` URL 매개변수에 저장됩니다. 같은 URL을 새로고침하면 복원되며, 해당 URL을 북마크하면 다시 방문할 때도 복원할 수 있습니다. URL을 공유하면 찜 목록도 함께 공유됩니다. 매개변수 없는 기본 주소로 새로 방문하면 목록은 비어 있습니다.
+- 지도는 `data/attraction_coordinates.csv`의 저장된 좌표를 사용합니다. 좌표를 확인하지 못한 관광지는 지도 아래에 별도로 표시하며, 임의 좌표를 사용하지 않습니다. 넓은 관광지의 마커는 대략적인 대표 위치입니다.
+- 좌표 출처: [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), ODbL. 각 행에 출처 URL이 있습니다.
+- `geocode_attractions.py`는 일회성 좌표 준비 도구이며 앱 실행 중에는 호출하지 않습니다. [Nominatim 이용 정책](https://operations.osmfoundation.org/policies/nominatim/)에 따라 한 연결에서 초당 1회 이하로 요청하고 `data/geocoding_cache.json`에 결과를 캐시합니다. 도로·동네만 반환되는 불확실한 주소 결과는 제외합니다.
+
 ---
 
 # 프로젝트 구조

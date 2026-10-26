@@ -1,0 +1,48 @@
+location_name,latitude,longitude,source,matched_name,precision
+1. Gyeongbokgung Palace,37.5797540,126.9766818,https://www.openstreetmap.org/relation/5501517,"경복궁, 청와대로, 궁정동, 청운효자동, 종로구, 서울특별시, 03048, 대한민국",attraction
+10. Everland,37.2921701,127.2015089,https://www.openstreetmap.org/node/13798001801,"Everland, 처인구, 용인시, 경기도, 17023, 대한민국",attraction
+11. Haeundae Beach,35.1577809,129.1581318,https://www.openstreetmap.org/way/107531972,"해운대 해수욕장, 우1동, 해운대구, 부산광역시, 대한민국",attraction
+12. Busan Gamcheon Culture Village,35.0963371,129.0087897,https://www.openstreetmap.org/way/382693934,"감천문화마을, 천해로, 감천동, 감천2동, 사하구, 부산광역시, 49374, 대한민국",attraction
+14. Seongsan Ilchulbong,33.4588891,126.9408178,https://www.openstreetmap.org/node/330006952,"성산일출봉, 284-12, 일출로, 성산리, 성산읍, 서귀포시, 제주특별자치도, 63643, 대한민국",attraction
+15. Lotte World Tower & Mall,37.5125537,127.1026790,https://www.openstreetmap.org/node/12520558001,"롯데월드타워, 잠실로, 신천동, 잠실6동, 송파구, 서울특별시, 05551, 대한민국",attraction
+16. Dongdaemun Design Plaza (DDP),37.5670686,127.0098990,https://www.openstreetmap.org/relation/10647068,"동대문디자인플라자, 281, 을지로, 동대문패션타운, 을지로7가, 광희동, 중구, 서울특별시, 04566, 대한민국",attraction
+17. Starfield Library,37.5101676,127.0600884,https://www.openstreetmap.org/node/5185480724,"별마당도서관, 테헤란로87길, 삼성동, 삼성1동, 강남구, 서울특별시, 06169, 대한민국",attraction
+18. Seoraksan National Park,38.1340905,128.4172172,https://www.openstreetmap.org/relation/17335482,"설악산 국립공원, 인제군, 강원특별자치도, 대한민국",attraction
+19. Haedong Yonggungsa,35.1884335,129.2229764,https://www.openstreetmap.org/way/382701819,"해동용궁사, 용궁길, 기장읍, 기장군, 부산광역시, 46084, 대한민국",attraction
+2. Myeongdong Shopping Street,37.5627106,126.9847070,https://www.openstreetmap.org/node/12894590901,"Myeongdong Shopping Street, 명동8길, 명동2가, 명동, 중구, 서울특별시, 04536, 대한민국",attraction
+20. Spirited Garden,33.3252630,126.2549289,https://www.openstreetmap.org/way/371667202,"생각하는 정원, 녹차분재로, 저지리, 한경면, 제주시, 제주특별자치도, 63005, 대한민국",attraction
+21. Namsan Park,37.5504617,126.9916008,https://www.openstreetmap.org/way/244397333,"남산공원, 중구, 서울특별시, 04340, 대한민국",attraction
+22. Bongeunsa Temple,37.5151321,127.0567944,https://www.openstreetmap.org/way/74010857,"봉은사, 531, 봉은사로, 삼성동, 삼성1동, 강남구, 서울특별시, 06087, 대한민국",attraction
+23. Gwangalli Beach,35.1508879,129.1167806,https://www.openstreetmap.org/way/107642460,"광안리해수욕장, 광안2동, 수영구, 부산광역시, 대한민국",attraction
+24. Bulguksa Temple,35.7889948,129.3308902,https://www.openstreetmap.org/way/382655135,"불국사, 385, 불국로, 진현동, 불국동, 경주시, 경상북도, 38127, 대한민국",attraction
+25. Sea Life Coex Seoul Aquarium,37.5131846,127.0586092,https://www.openstreetmap.org/node/2676488130,"코엑스 아쿠아리움 (COEX Aquarium), 봉은사로, 삼성동, 삼성1동, 강남구, 서울특별시, 06163, 대한민국",attraction
+26. Myeongdong NANTA Theater,37.5635792,126.9836608,https://www.openstreetmap.org/node/11012770803,"명동난타극장, 명동길, 명동1가, 명동, 중구, 서울특별시, 04538, 대한민국",attraction
+27. National Folk Museum of Korea,37.5808343,126.9790431,https://www.openstreetmap.org/relation/5501518,"국립민속박물관, 삼청로, 창성동, 청운효자동, 종로구, 서울특별시, 03062, 대한민국",attraction
+28. Hwaseong Fortress,37.2867876,127.0114366,https://www.openstreetmap.org/node/1791243454,"수원화성, 화서문로17번길, 행리단길, 장안동, 팔달구, 수원시, 경기도, 16272, 대한민국",attraction
+29. BIFF Square,35.0988987,129.0290545,https://www.openstreetmap.org/node/4524166889,"BIFF 광장 Streed Food, 남포길, 남포동3가, 남포동, 중구, 부산광역시, 48983, 대한민국",attraction
+3. N Seoul Tower,37.5512692,126.9882959,https://www.openstreetmap.org/relation/16474080,"남산서울타워, 105, 남산공원길, 용산동2가, 용산2가동, 용산구, 서울특별시, 04340, 대한민국",attraction
+30. Korean Folk Village,37.2594792,127.1210423,https://www.openstreetmap.org/way/392288060,"한국민속촌, 사은로, 보라동, 기흥구, 용인시, 경기도, 17079, 대한민국",attraction
+31. Jeongbang Waterfall,33.2448578,126.5715451,https://www.openstreetmap.org/node/3739756346,"정방폭포, 송산동, 서귀포시, 제주특별자치도, 63597, 대한민국",attraction
+32. DMZ,37.9175600,126.6905256,https://www.openstreetmap.org/way/445313800,"제3땅굴, 군내면, 파주시, 경기도, 10800, 대한민국",attraction
+33. Songdo Cable Car,35.0689247,129.0220234,https://www.openstreetmap.org/way/667458143,"송도해상케이블카, 송도해변로, 암남동, 서구, 부산광역시, 49269, 대한민국",attraction
+34. Daepo Haean Jusangjeolli Cliff,33.2389016,126.4264614,https://www.openstreetmap.org/node/13894069062,"36-24, 이어도로, 중문동, 서귀포시, 제주특별자치도, 63547, 대한민국",address
+35. Jogyesa Temple,37.5741432,126.9819120,https://www.openstreetmap.org/way/223157537,"조계사, 55, 우정국로, 종로1가, 견지동, 종로1·2·3·4가동, 종로구, 서울특별시, 03144, 대한민국",attraction
+36. Namsangol Hanok Village,37.5592839,126.9944767,https://www.openstreetmap.org/node/4665630597,"남산골한옥마을, 28, 퇴계로34길, 필동1가, 필동, 중구, 서울특별시, 04626, 대한민국",attraction
+37. Donggung Palace and Wolji Pond,35.8347003,129.2264375,https://www.openstreetmap.org/way/477417220,"경주 동궁과 월지, 월성동, 경주시, 경상북도, 대한민국",attraction
+39. Jeonju Hanok Village,35.8159507,127.1530019,https://www.openstreetmap.org/node/13800568701,"Jeonju Hanok Village History Hall, 최명희길, 풍남동3가, 완산구, 전주시, 전북특별자치도, 55041, 대한민국",attraction
+4. National Museum Of Korea,37.5239530,126.9803196,https://www.openstreetmap.org/way/168364800,"국립중앙박물관, 137, 서빙고로, 용산동6가, 서빙고동, 용산구, 서울특별시, 04383, 대한민국",attraction
+42. Gwanghwamun Gate,37.5759259,126.9768160,https://www.openstreetmap.org/way/170199440,"광화문, 161, 사직로, 세종로, 사직동, 종로구, 서울특별시, 03045, 대한민국",attraction
+43. Seoul Arts Center,37.4797475,127.0133947,https://www.openstreetmap.org/way/606624825,"예술의 전당, 2406, 남부순환로, 서초3동, 서초구, 서울특별시, 06757, 대한민국",attraction
+44. Changgyeonggung Palace,37.5802456,126.9948331,https://www.openstreetmap.org/way/380863257,"창경궁, 185, 창경궁로, 명륜2가, 혜화동, 종로구, 서울특별시, 03072, 대한민국",attraction
+47. Gyeongju National Museum,35.8289946,129.2279662,https://www.openstreetmap.org/way/573218888,"국립경주박물관, 일정로, 구황동, 월성동, 경주시, 경상북도, 38161, 대한민국",attraction
+49. Woljeonggyo Bridge,35.8289470,129.2181316,https://www.openstreetmap.org/way/855882072,"Woljeonggyo Bridge, 인왕동, 월성동, 경주시, 경상북도, 38164, 대한민국",attraction
+5. Insadong,37.5716543,126.9864242,https://www.openstreetmap.org/node/415153837,"인사동, 종로1·2·3·4가동, 종로구, 서울특별시, 03164, 대한민국",attraction
+51. Spa Gogyeol,37.5182400,127.0422303,https://www.openstreetmap.org/node/11752615950,"Spa Gogyeol 스파고결, 13, 선릉로132길, 청담동, 강남구, 서울특별시, 06065, 대한민국",attraction
+53. Nami Island,37.7917285,127.5251440,https://www.openstreetmap.org/way/238212575,"남이섬, 남산면, 춘천시, 강원특별자치도, 24464, 대한민국",attraction
+54. Lavish Spa,37.5811651,127.0047047,https://www.openstreetmap.org/node/6440071885,"Lavish Spa, 6-6, 동숭3길, 대학로거리, 동숭동, 이화동, 종로구, 서울특별시, 03085, 대한민국",attraction
+55. Bugak Palgakjeong Pavilion,37.6017059,126.9806936,https://www.openstreetmap.org/way/298518901,"북악 팔각정, 성북동, 평창동, 종로구, 서울특별시, 대한민국",attraction
+56. The Spa Grand Hyatt Seoul,37.5395783,126.9976508,https://www.openstreetmap.org/way/228802390,"그랜드하얏트 호텔, 이태원로55길, 한남동, 용산구, 서울특별시, 04347, 대한민국",attraction
+6. The War Memorial of Korea,37.5359715,126.9772916,https://www.openstreetmap.org/way/229891123,"전쟁기념관, 29, 이태원로, 한강로1가, 남영동, 용산구, 서울특별시, 04353, 대한민국",attraction
+7. Bukchon Hanok Village,37.5823919,126.9858648,https://www.openstreetmap.org/node/2669684119,"북촌한옥마을 ДЕРЕВНЯ, 북촌로12길, 가회동, 종로구, 서울특별시, 03056, 대한민국",attraction
+8. Changdeokgung Palace,37.5823872,126.9917013,https://www.openstreetmap.org/way/789965985,"창덕궁, 99, 율곡로, 와룡동, 종로1·2·3·4가동, 종로구, 서울특별시, 03072, 대한민국",attraction
+9. Cheonggyecheon Stream,37.5722871,127.0367285,https://www.openstreetmap.org/way/769631455,"청계천, 동대문구, 서울특별시, 대한민국",attraction

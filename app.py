@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import base64
 import html
+import hashlib
 import json
 import os
 import re
@@ -12,6 +13,7 @@ from typing import Any, Iterable
 import numpy as np
 import pandas as pd
 import streamlit as st
+import pydeck as pdk
 
 
 # =========================================================
@@ -25,6 +27,7 @@ st.set_page_config(
 
 DEFAULT_TOP_N = 6
 PROFILE_CSV_PATH = Path("data/tourist_profile_data_with_tips.csv")
+COORDINATES_PATH = Path("data/attraction_coordinates.csv")
 IMAGE_DIR = Path("images")
 
 SENTIMENTS = ("positive", "neutral", "negative")
@@ -677,12 +680,27 @@ def toggle_saved_place(place_id: str) -> None:
         saved.remove(place_id)
     else:
         saved.append(place_id)
+    if saved:
+        st.query_params["saved"] = ",".join(saved_place_token(item) for item in saved)
+    elif "saved" in st.query_params:
+        del st.query_params["saved"]
+
+
+def saved_place_token(place_id: str) -> str:
+    return hashlib.sha256(place_id.encode("utf-8")).hexdigest()[:12]
+
+
+def restore_saved_places(df: pd.DataFrame) -> None:
+    if "saved_places" not in st.session_state:
+        known = {saved_place_token(name): name for name in df["location_name"].map(safe_text)}
+        tokens = str(st.query_params.get("saved", "")).split(",")
+        st.session_state.saved_places = list(dict.fromkeys(known[token] for token in tokens if token in known))
 
 
 def render_saved_places(df: pd.DataFrame) -> None:
     saved_ids = st.session_state.saved_places
     with st.expander(f"♥ Saved places ({len(saved_ids)})"):
-        st.caption("Saved for this session. Download your list to keep it for later.")
+        st.caption("Your saved list survives refreshing this page. Bookmark this page or download your list to keep it.")
         if not saved_ids:
             st.info("Tap ♡ Save on an attraction to build your travel shortlist.")
             return
@@ -788,6 +806,74 @@ def render_recommendations(
                 render_card(row, start + offset + 1)
 
 
+@st.cache_data
+def load_coordinates() -> pd.DataFrame:
+    coordinates = pd.read_csv(COORDINATES_PATH)
+    ensure_columns(coordinates, ["location_name", "latitude", "longitude"], "map coordinates")
+    for column in ("latitude", "longitude"):
+        coordinates[column] = pd.to_numeric(coordinates[column], errors="coerce")
+    return coordinates.dropna(subset=["latitude", "longitude"]).drop_duplicates("location_name")
+
+
+def render_map_page(df: pd.DataFrame) -> None:
+    st.markdown("## Explore on the map")
+    st.caption("Find attractions across South Korea. Orange markers are your saved places.")
+    scope = st.radio("Show attractions", ["All attractions", "Saved places"], horizontal=True, key="map_scope")
+    visible = df[df["location_name"].isin(st.session_state.saved_places)].copy() if scope == "Saved places" else df.copy()
+    if visible.empty:
+        st.info("Save attractions from the recommendations to see them on the map.")
+        return
+    chosen = st.selectbox(
+        "Find an attraction", options=visible["location_name"].tolist(),
+        index=None, placeholder="Choose a place to focus the map…",
+        format_func=clean_place_name, key="map_place",
+    )
+    try:
+        points = visible.merge(load_coordinates(), on="location_name", how="inner")
+    except (FileNotFoundError, ValueError) as exc:
+        st.error(f"Map coordinates are unavailable: {exc}")
+        return
+    if not points.empty:
+        points["name"] = points["location_name"].map(lambda value: escape(clean_place_name(value)))
+        points["address"] = points["english_address"].map(escape)
+        points["rating"] = points["avg_rating"].map(lambda value: f"{value:.1f}/5" if pd.notna(value) else "Unavailable")
+        points["color"] = points["location_name"].map(
+            lambda name: [245, 130, 45, 230] if name in st.session_state.saved_places else [37, 99, 235, 210]
+        )
+        focused = points[points["location_name"] == chosen]
+        view = pdk.ViewState(latitude=36.1, longitude=127.9, zoom=5.5, pitch=0)
+        if not focused.empty:
+            view = pdk.ViewState(latitude=float(focused.iloc[0]["latitude"]), longitude=float(focused.iloc[0]["longitude"]), zoom=12, pitch=0)
+        st.pydeck_chart(pdk.Deck(
+            map_provider="carto", map_style="light", initial_view_state=view,
+            layers=[pdk.Layer(
+                "ScatterplotLayer", data=points[["name", "address", "rating", "latitude", "longitude", "color"]],
+                get_position="[longitude, latitude]", get_fill_color="color",
+                get_radius=700, radius_min_pixels=7, radius_max_pixels=14,
+                pickable=True, auto_highlight=True,
+            )],
+            tooltip={"html": "<b>{name}</b><br/>⭐ {rating}<br/>{address}"},
+        ), use_container_width=True)
+        st.caption(f"{len(points)} of {len(visible)} attractions mapped · Approximate place locations.")
+        st.caption("Coordinates © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) · ODbL")
+    else:
+        st.info("No verified coordinates are available for these places yet.")
+    if chosen:
+        row = visible.loc[visible["location_name"] == chosen].iloc[0]
+        details, save = st.columns([3, 1])
+        with details:
+            if st.button(f"View {clean_place_name(chosen)} →", key="map_details"):
+                render_place_details(row)
+        with save:
+            saved = chosen in st.session_state.saved_places
+            st.button("♥ Saved" if saved else "♡ Save", key="map_favorite", on_click=toggle_saved_place, args=(chosen,))
+    unmapped = visible[~visible["location_name"].isin(points["location_name"])]
+    if not unmapped.empty:
+        with st.expander(f"Places not yet mapped ({len(unmapped)})"):
+            for _, row in unmapped.iterrows():
+                st.write(f"{clean_place_name(row['location_name'])} — {safe_text(row['english_address'])}")
+
+
 def render_initial_explanation() -> None:
     st.markdown("## How it works")
     st.write(
@@ -812,8 +898,6 @@ def toggle_keyword(value: str) -> None:
 def main() -> None:
     if "selected_keywords" not in st.session_state:
         st.session_state.selected_keywords = []
-    if "saved_places" not in st.session_state:
-        st.session_state.saved_places = []
 
     try:
         df, attraction_matrix = load_data(str(PROFILE_CSV_PATH))
@@ -839,7 +923,12 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
+    restore_saved_places(df)
+    page = st.radio("Explore", ["Recommendations", "Map"], horizontal=True, key="page", label_visibility="collapsed")
     render_saved_places(df)
+    if page == "Map":
+        render_map_page(df)
+        return
     selected = render_keyword_selector()
     if selected:
         top_n = render_result_count(len(df))
