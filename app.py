@@ -114,6 +114,23 @@ APP_CSS = """
 .place-title { height: 70px; line-height: 1.5; overflow-y: auto; }
 .address-text { height: 42px; overflow-y: auto; }
 .highlights-box { height: 92px; overflow-y: auto; }
+.card-meta { color: #64748B; font-size: 14px; margin-bottom: 8px; }
+.card-meta strong { color: #2563EB; }
+.card-highlights { height: 86px; overflow-y: auto; }
+div[class*="st-key-card_title_"] button {
+    border: 0; background: transparent; color: #1E3A5F;
+    padding: 0; min-height: 64px; width: 100%; justify-content: flex-start;
+    text-align: left;
+}
+div[class*="st-key-card_title_"] button p { font-size: 21px; font-weight: 750; }
+div[class*="st-key-card_title_"] button:hover { color: #2563EB; }
+[role="dialog"] .intro-text,
+[role="dialog"] .insight-box,
+[role="dialog"] .tip-box,
+[role="dialog"] .highlights-box,
+[role="dialog"] .place-title,
+[role="dialog"] .address-text,
+[role="dialog"] .owi-box { height: auto; overflow: visible; }
 
 .intro-text {
     color: #374151;
@@ -551,6 +568,41 @@ def render_keyword_selector() -> list[str]:
 
 
 def render_card(row: pd.Series, rank: int) -> None:
+    place_id = safe_text(row.get("location_name"))
+    place_name = clean_place_name(place_id)
+    rating = row.get("avg_rating")
+    rating_text = f"⭐ {float(rating):.1f}/5" if pd.notna(rating) else "Rating unavailable"
+    with st.container(border=True):
+        render_image(place_name)
+        if st.button(
+            f"{rank_badge(rank)} {place_name}", key=f"card_title_{rank}",
+            use_container_width=True,
+        ):
+            render_place_details(row, rank)
+        st.markdown(
+            f'<div class="card-meta"><strong>{int(row["match_percent"])}% Match</strong>'
+            f' &nbsp; · &nbsp; {rating_text}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="card-highlights">{highlight_badges(parse_aspects(row.get("positive")), limit=3)}</div>',
+            unsafe_allow_html=True,
+        )
+        details, favorite = st.columns([2, 1])
+        with details:
+            if st.button("View details →", key=f"details_{place_id}", use_container_width=True):
+                render_place_details(row, rank)
+        with favorite:
+            saved = place_id in st.session_state.saved_places
+            st.button(
+                "♥ Saved" if saved else "♡ Save", key=f"favorite_{place_id}",
+                type="primary" if saved else "secondary", use_container_width=True,
+                on_click=toggle_saved_place, args=(place_id,),
+            )
+
+
+@st.dialog("Attraction details", width="large")
+def render_place_details(row: pd.Series, rank: int | None = None) -> None:
     place_name = clean_place_name(row.get("location_name"))
     place_id = safe_text(row.get("location_name"))
     intro = safe_text(row.get("intro"))
@@ -561,17 +613,8 @@ def render_card(row: pd.Series, rank: int) -> None:
         render_image(place_name)
         # Location name
         st.markdown(
-            f'<div class="place-title">{rank_badge(rank)} {escape(place_name)}</div>',
+            f'<div class="place-title">{rank_badge(rank) + " " if rank else ""}{escape(place_name)}</div>',
             unsafe_allow_html=True,
-        )
-        saved = place_id in st.session_state.saved_places
-        st.button(
-            "♥ Saved" if saved else "♡ Save",
-            key=f"favorite_{place_id}",
-            type="primary" if saved else "secondary",
-            on_click=toggle_saved_place,
-            args=(place_id,),
-            help="Remove from saved places" if saved else "Add to saved places",
         )
 
         # Address
@@ -581,10 +624,11 @@ def render_card(row: pd.Series, rank: int) -> None:
         )
 
         # Match
-        st.markdown(
-            f'<div class="match-text">⭐ {int(row["match_percent"])}% Match</div>',
-            unsafe_allow_html=True,
-        )
+        if "match_percent" in row:
+            st.markdown(
+                f'<div class="match-text">⭐ {int(row["match_percent"])}% Match</div>',
+                unsafe_allow_html=True,
+            )
 
         # Rating
         rating = row.get("avg_rating")
@@ -651,7 +695,8 @@ def render_saved_places(df: pd.DataFrame) -> None:
             place_id = safe_text(row["location_name"])
             detail, action = st.columns([4, 1])
             with detail:
-                st.markdown(f"**{escape(clean_place_name(place_id))}**")
+                if st.button(clean_place_name(place_id), key=f"saved_details_{place_id}"):
+                    render_place_details(row)
                 address = safe_text(row.get("english_address"))
                 if address:
                     st.caption(f"📍 {address}")
