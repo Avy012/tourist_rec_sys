@@ -174,6 +174,27 @@ div[class*="st-key-card_title_"] button:hover { color: #2563EB; }
 
 .section-label { font-weight: 850; margin: 10px 0 6px; color: #111827; }
 .small-note { color: #64748B; font-size: 14px; }
+.st-key-main_navigation {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    padding: 14px 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 14px rgba(30, 58, 95, 0.04);
+}
+.st-key-main_navigation [data-testid="stHorizontalBlock"] {
+    flex-wrap: nowrap; align-items: center; gap: 12px;
+}
+.st-key-main_navigation [data-testid="stColumn"]:first-child {
+    flex: 1 1 auto; min-width: 0; width: auto;
+}
+.st-key-main_navigation [data-testid="stColumn"]:last-child {
+    flex: 0 0 auto; min-width: 0; width: auto;
+}
+.nav-brand { color: #1E3A5F; font-size: 20px; font-weight: 850; white-space: nowrap; }
+@media (max-width: 460px) {
+    .st-key-main_navigation [data-testid="stHorizontalBlock"] { flex-wrap: wrap; }
+}
 
 .st-key-result_count_controls [data-testid="stHorizontalBlock"] {
     flex-wrap: nowrap;
@@ -895,6 +916,30 @@ def toggle_keyword(value: str) -> None:
 # =========================================================
 # Main
 # =========================================================
+def keep_navigation_selected() -> None:
+    if st.session_state.page is None:
+        st.session_state.page = st.session_state.active_page
+    else:
+        st.session_state.active_page = st.session_state.page
+
+
+def render_navigation() -> str:
+    if "active_page" not in st.session_state:
+        st.session_state.active_page = "Recommendations"
+    if "page" not in st.session_state:
+        st.session_state.page = st.session_state.active_page
+    with st.container(key="main_navigation"):
+        brand, menu = st.columns([2, 3])
+        with brand:
+            st.markdown('<div class="nav-brand">🌏 SmartTrip AI</div>', unsafe_allow_html=True)
+        with menu:
+            page = st.pills(
+                "Main navigation", ["Recommendations", "Map"], key="page",
+                on_change=keep_navigation_selected, label_visibility="collapsed",
+            )
+    return page
+
+
 def main() -> None:
     if "selected_keywords" not in st.session_state:
         st.session_state.selected_keywords = []
@@ -913,6 +958,9 @@ def main() -> None:
         st.exception(exc)
         st.stop()
 
+    restore_saved_places(df)
+    page = render_navigation()
+
     st.markdown(
         """
         <div class="hero">
@@ -923,8 +971,6 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    restore_saved_places(df)
-    page = st.radio("Explore", ["Recommendations", "Map"], horizontal=True, key="page", label_visibility="collapsed")
     render_saved_places(df)
     if page == "Map":
         render_map_page(df)
